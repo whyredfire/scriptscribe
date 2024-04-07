@@ -2,23 +2,36 @@ body {
     font-family: monospace;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
 header, footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 20px 0;
 }
+
+footer {
+    margin-top: auto;
+}
+
 .container {
     max-width: 800px;
     margin: 20px auto;
     padding: 0 20px;
+    flex: 1;
 }
-input[type="text"], input[type="file"] {
+
+input[type="text"],
+input[type="file"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
 }
+
 button {
     padding: 10px 20px;
     background-color: #007bff;
@@ -26,18 +39,23 @@ button {
     border: none;
     cursor: pointer;
 }
+
 button:hover {
     background-color: #0056b3;
 }
+
 .result {
     margin-top: 20px;
 }
+
 .export-options {
     margin-top: 20px;
 }
+
 .export-options button {
     margin-right: 10px;
 }
+
 .hidden {
     display: none;
 }
