@@ -16,16 +16,14 @@
             <h2>Welcome to ScriptScribe</h2>
             <p>Enter your text or upload an image to extract text:</p>
             <form id="inputForm">
-                <input type="text" placeholder="Enter your text">
-                <input type="file" accept="image/*">
-                <button type="submit">Extract Text</button>
+                <textarea id="textInput" placeholder="Enter your text"></textarea>
+                <input type="file" id="fileInput" accept="image/*">
+                <button type="submit" id="uploadButton">Extract Text</button>
             </form>
         </section>
 
         <section id="extractionPage" class="hidden">
             <div class="result">
-                <h2>Extracted Text</h2>
-                <p id="extractedText"></p>
                 <h2>Summarized Text</h2>
                 <p id="summarizedText"></p>
                 <button id="editButton">Edit Summary</button>

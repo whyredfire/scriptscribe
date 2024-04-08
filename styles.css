@@ -25,11 +25,18 @@ footer {
     flex: 1;
 }
 
-input[type="text"],
 input[type="file"] {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    resize: vertical;
+    box-sizing: border-box;
 }
 
 button {
@@ -38,6 +45,7 @@ button {
     color: #fff;
     border: none;
     cursor: pointer;
+    border-radius: 6px;
 }
 
 button:hover {
