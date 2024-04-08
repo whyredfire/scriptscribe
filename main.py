@@ -38,6 +38,10 @@ def summarize():
     text = data['text']
     sentences = nltk.sent_tokenize(text)
     num_sentences = len(sentences)
+    if num_sentences//3 > 0:
+        sum_sentences = num_sentences//3
+    else:
+        sum_sentences = 1
 
     word_frequencies = {}
     for word in nltk.word_tokenize(text):
@@ -60,7 +64,7 @@ def summarize():
                 else:
                     sentence_scores[sentence] += word_frequencies[word]
 
-    num_sentences = min(num_sentences//3, len(sentences))
+    num_sentences = min(sum_sentences, len(sentences))
     summary_sentences = heapq.nlargest(num_sentences, sentence_scores, key=sentence_scores.get)
     summary = ' '.join(summary_sentences)
 
