@@ -1,9 +1,12 @@
 const inputForm = document.getElementById('inputForm');
 const textInput = document.getElementById('textInput');
 const fileInput = document.getElementById('fileInput');
+
 const summarizeButton = document.getElementById('summarizeButton');
 const summarizedText = document.getElementById('summarizedText');
 const extractionPage = document.getElementById('extractionPage');
+
+const copyClipboard = document.getElementById('copyClipboard');
 
 const autoResize = () => {
     textInput.style.height = 'auto';
@@ -46,4 +49,10 @@ summarizeButton.addEventListener('click', async () => {
     const data = await response.json();
     summarizedText.innerText = data.summary;
     extractionPage.classList.remove("hidden");
+});
+
+copyClipboard.addEventListener('click', async () => {
+    let summary = summarizedText.innerHTML;
+    await navigator.clipboard.writeText(summary);
+    alert("Summary copied to clipboard!");
 });
