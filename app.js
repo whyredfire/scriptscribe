@@ -7,6 +7,7 @@ const summarizedText = document.getElementById('summarizedText');
 const extractionPage = document.getElementById('extractionPage');
 
 const copyClipboard = document.getElementById('copyClipboard');
+const downloadPdf = document.getElementById('downloadPDF');
 
 const autoResize = () => {
     textInput.style.height = 'auto';
@@ -33,7 +34,7 @@ inputForm.addEventListener('submit', async (event) => {
 textInput.addEventListener('input', autoResize);
 
 summarizeButton.addEventListener('click', async () => {
-    let extractedText = textInput.value;
+    const extractedText = textInput.value;
     const jsonData = {
         "text" : `${extractedText}`
     };
@@ -49,10 +50,34 @@ summarizeButton.addEventListener('click', async () => {
     const data = await response.json();
     summarizedText.innerText = data.summary;
     extractionPage.classList.remove("hidden");
+    downloadPdf.classList.remove("hidden");
 });
 
 copyClipboard.addEventListener('click', async () => {
-    let summary = summarizedText.innerHTML;
+    const summary = summarizedText.innerHTML;
     await navigator.clipboard.writeText(summary);
     alert("Summary copied to clipboard!");
+});
+
+downloadPdf.addEventListener('click', async () => {
+    const extractedText = textInput.value;
+    const summary = summarizedText.innerHTML;
+
+    const jsonData = {
+        "text": `${extractedText}`,
+        "summary": `${summary}`
+    }
+
+    fetch('http://127.0.0.1:5000/exportpdf', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then( res => res.blob() )
+        .then( blob => {
+            var file = window.URL.createObjectURL(blob);
+            window.location.assign(file);
+    });
 });
