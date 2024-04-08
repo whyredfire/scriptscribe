@@ -9,6 +9,8 @@ const extractionPage = document.getElementById('extractionPage');
 const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
+const URL = "http://0.0.0.0:5000"
+
 const autoResize = () => {
     textInput.style.height = 'auto';
     textInput.style.height = `${textInput.scrollHeight}px`;
@@ -20,7 +22,7 @@ inputForm.addEventListener('submit', async (event) => {
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
 
-    const response = await fetch('http://127.0.0.1:5000/ocr', {
+    const response = await fetch(`${URL}/ocr`, {
         method: 'POST',
         body: formData
     });
@@ -39,7 +41,7 @@ summarizeButton.addEventListener('click', async () => {
         "text" : `${extractedText}`
     };
 
-    const response = await fetch('http://127.0.0.1:5000/summarize', {
+    const response = await fetch(`${URL}/summarize`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -68,7 +70,7 @@ downloadPdf.addEventListener('click', async () => {
         "summary": `${summary}`
     }
 
-    fetch('http://127.0.0.1:5000/exportpdf', {
+    fetch(`${URL}/exportpdf`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
