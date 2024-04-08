@@ -1,11 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
-import pytesseract
+from fpdf import FPDF
 from PIL import Image
 import cv2
+import datetime
+import heapq
 import numpy as np
 import nltk
-import heapq
+import os
+import pytesseract
+import textwrap
 
 app = Flask(__name__)
 CORS(app)
@@ -61,6 +65,74 @@ def summarize():
     summary = ' '.join(summary_sentences)
 
     return jsonify({'summary': summary}), 200
+
+@app.route('/exportpdf', methods=['POST'])
+def exportPdf():
+    data = request.get_json()
+
+    if 'text' not in data or 'summary' not in data:
+        return jsonify({'error': 'Text and summary fields are required'}), 400
+
+    for file in os.listdir():
+        if file.endswith('.pdf'):
+            os.remove(file)
+
+    text = data['text']
+    summary = data['summary']
+
+    a4_width_mm = 210
+    pt_to_mm = 0.35
+    fontsize_pt = 10
+    fontsize_mm = fontsize_pt * pt_to_mm
+    margin_bottom_mm = 10
+    character_width_mm = 7 * pt_to_mm
+    width_text = a4_width_mm / character_width_mm
+
+    pdf = FPDF(orientation='P', unit='mm', format='A4')
+    pdf.set_auto_page_break(True, margin=margin_bottom_mm)
+    pdf.add_page()
+    pdf.set_font(family='Courier', size=fontsize_pt)
+
+    pdf.set_font('Courier', 'B', 16)
+    pdf.cell(200, 10, txt="ScriptScribe", ln=1, align='C')
+
+    pdf.set_line_width(0.5)
+    pdf.line(10, pdf.get_y(), 200 - 10, pdf.get_y())
+
+    pdf.ln(10)
+
+    pdf.set_font('Courier', 'B', fontsize_pt)
+    process_text(pdf, "Input:", width_text, fontsize_mm)
+    pdf.set_font('Courier', '', fontsize_pt)
+    process_text(pdf, text, width_text, fontsize_mm)
+
+    pdf.ln(10)
+
+    pdf.set_font('Courier', 'B', fontsize_pt)
+    process_text(pdf, "Summary:", width_text, fontsize_mm)
+    pdf.set_font('Courier', '', fontsize_pt)
+    process_text(pdf, summary, width_text, fontsize_mm)
+
+    current_time = datetime.datetime.now()
+    timestamp = current_time.strftime("%y%m%d_%H%M%S")
+    pdf_path = f"scriptscribe_exported-{timestamp}.pdf" 
+
+    pdf.output(pdf_path, 'F')
+
+    if not os.path.exists(pdf_path):
+        return jsonify({'error': 'PDF file not found'}), 404
+
+    return send_file(pdf_path, as_attachment=True), 200
+
+def process_text(pdf, text, width_text, fontsize_mm):
+    lines = text.split('\n')
+    for line in lines:
+        wrapped_lines = textwrap.wrap(line, width_text)
+        for wrapped_line in wrapped_lines:
+            pdf.cell(0, fontsize_mm, wrapped_line, ln=1)
+
+        if len(wrapped_lines) > 1:
+            pdf.ln()
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -59,3 +59,11 @@ For text summarization, provide a JSON file (`test.json` in this example) contai
 ```bash
 curl -X POST -H "Content-Type: application/json" -d @test.json http://127.0.0.1:5000/summarize
 ```
+
+### Exporting summary
+
+For exporting summary, provide a JSON file (`test_pdf.json` in this example) containing the text and its summary. Send a POST request with the JSON data to the local server:
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d @test_pdf.json http://127.0.0.1:5000/exportpdf --output test.pdf
+```
