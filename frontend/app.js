@@ -9,7 +9,7 @@ const extractionPage = document.getElementById('extractionPage');
 const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
-const URL = "http://0.0.0.0:5000"
+const URL = "http://localhost:5000"
 
 const autoResize = () => {
     textInput.style.height = 'auto';
