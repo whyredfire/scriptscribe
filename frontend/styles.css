@@ -25,7 +25,23 @@ footer {
     margin-top: auto;
 }
 
+.auth-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+#loginSection,
+#signupSection {
+    flex: 1;
+    margin: 0 auto;
+    max-width: 400px;
+}
+
 #loginSection {
+    margin-left: 200px;
+    margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -64,6 +80,8 @@ footer {
 }
 
 #signupSection {
+    margin-right: 200px;
+    margin-top: 20px;
     margin-bottom: 20px;
     padding: 20px;
     background-color: #f9f9f9;
@@ -161,6 +179,10 @@ button:hover {
 
 .export-options button {
     margin-right: 10px;
+}
+
+.export-options h2 {
+    margin-bottom: 7px;
 }
 
 .hidden {
