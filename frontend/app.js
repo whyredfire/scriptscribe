@@ -9,16 +9,10 @@ const extractionPage = document.getElementById('extractionPage');
 const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
-const loginSection = document.getElementById('loginSection');
-const loginForm = document.getElementById('loginForm');
-const userNameInput = document.getElementById('userName');
-const passwordInput = document.getElementById('password');
+const authContainer = document.querySelector('.auth-container');
+const usernameInput = document.getElementById('authUsername');
+const passwordInput = document.getElementById('authPassword');
 const loginButton = document.getElementById('loginButton');
-
-const signupSection = document.getElementById('signupSection');
-const signupForm = document.getElementById('signupForm');
-const signupUsernameInput = document.getElementById('signupUsername');
-const signupPasswordInput = document.getElementById('signupPassword');
 const signupButton = document.getElementById('signupButton');
 
 const URL = "http://localhost:5000"
@@ -28,15 +22,26 @@ const autoResize = () => {
     textInput.style.height = `${textInput.scrollHeight}px`;
 };
 
-loginForm.addEventListener('submit', async (event) => {
+const resetForm = () => {
+    console.log('Resetting form...');
+    usernameInput.innerText = '';
+    passwordInput.innerText = '';
+};
+
+loginButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = userNameInput.value;
+    const username = usernameInput.value;
     const password = passwordInput.value;
     const jsonData = {
         "username": `${username}`,
         "password": `${password}`
     };
+
+    if (username == '' || password == '') {
+        alert("username or password can't be empty");
+        return;
+    }
 
     const response = await fetch(`${URL}/login`, {
         method: 'POST',
@@ -48,25 +53,31 @@ loginForm.addEventListener('submit', async (event) => {
 
     const data = await response.json();
 
-    if (response.ok) {
+    if (data["isSuccesful"]) {
         console.log(`user: ${username} logged in`);
-        loginSection.classList.add("hidden");
-        signupSection.classList.add("hidden");
+        alert(`Signed in!`);
+        authContainer.remove();
     } else {
         console.log(`user: ${username} failed to log in`);
+        alert(`${data[message]}`);
+        resetForm();
     }
-
 });
 
-signupForm.addEventListener('submit', async (event) => {
+signupButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
-    const username = signupUsernameInput.value;
-    const password = signupPasswordInput.value;
+    const username = usernameInput.value;
+    const password = passwordInput.value;
     const jsonData = {
         "username": `${username}`,
         "password": `${password}`
     };
+
+    if (username == '' || password == '') {
+        alert("username or password can't be empty");
+        return;
+    }
 
     const response = await fetch(`${URL}/signup`, {
         method: 'POST',
@@ -77,12 +88,15 @@ signupForm.addEventListener('submit', async (event) => {
     });
 
     const data = await response.json();
+    console.log(data)
 
-    if (response.ok) {
+    if (data["isSuccesful"]) {
         console.log(`user: ${username} signed up`);
-        signupSection.classList.add("hidden");
+        alert(`Signed up!`);
     } else {
         console.log(`user: ${username} failed to sign up`);
+        alert(`${data[message]}`);
+        resetForm();
     }
 });
 
