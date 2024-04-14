@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
 from fpdf import FPDF
 from PIL import Image
-import cv2
 import datetime
 import hashlib
 import heapq
