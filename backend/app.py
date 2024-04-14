@@ -4,7 +4,9 @@ from fpdf import FPDF
 from PIL import Image
 import cv2
 import datetime
+import hashlib
 import heapq
+import json
 import numpy as np
 import nltk
 import os
@@ -13,6 +15,81 @@ import textwrap
 
 app = Flask(__name__)
 CORS(app)
+
+def check_user(username, json_data, jsondb):
+    with open(jsondb, "r") as file:
+        user_data = json.load(file)
+
+    user_list = user_data.get("users", [])
+    for user in user_list:
+        if user['username'] == username:
+            return True
+    return False
+
+def salty_pass(password):
+    salt = 'scriptscribeftw'
+    salted_pass = password + salt
+
+    hashed_pass = hashlib.md5(salted_pass.encode())
+    return hashed_pass.hexdigest()
+
+@app.route('/login', methods=['POST'])
+def auth():
+    data = request.get_json()
+
+    if 'username' not in data or 'password' not in data:
+        return jsonify({'error': 'either username or password missing'}), 400
+    
+    username = data['username']
+    password = data['password']
+
+    if not check_user(username, data, "users.json"):
+        return jsonify({'error': 'user does not exist'}), 400
+    
+    def user_auth(username, password):
+        with open("users.json", "r") as file:
+            user_data = json.load(file)
+
+        user_list = user_data.get("users", [])
+        for user in user_list:
+            if user['username'] == username:
+                if (salty_pass(password) == user['password']):
+                    return True
+        return False
+
+    if user_auth(username, password):
+        return jsonify({'success': 'logged in'}), 200
+    else:
+        return jsonify({'error': 'incorrect password'}), 400
+    
+@app.route('/signup', methods=['POST'])
+def signup():
+    data = request.get_json()
+
+    if 'username' not in data or 'password' not in data:
+        return jsonify({'error': 'either username or password missing'}), 400
+
+    username = data['username']
+    password = data['password']
+
+    if check_user(username, data, "users.json"):
+        return jsonify({'error': 'username already taken'}), 200
+
+    hashed_pass = salty_pass(password)
+
+    new_user = {
+        "username": username,
+        "password": hashed_pass
+    }
+
+    with open("users.json", "r") as file:
+        user_data = json.load(file)
+        user_data["users"].append(new_user)
+
+    with open("users.json", "w") as file:
+        json.dump(user_data, file, indent=4)
+
+    return jsonify({'success': 'signed up'}), 200
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
