@@ -18,6 +18,7 @@
             <form id="authForm">
                 <input type="text" id="authUsername" placeholder="Username">
                 <input type="password" id="authPassword" placeholder="Password">
+                <p id="errorMessage" align="left"></p>
                 <div class="auth-buttons">
                     <button type="submit" id="loginButton">Login</button>
                     <button type="submit" id="signupButton">Sign Up</button>
@@ -26,7 +27,7 @@
         </section>
     </div>
 
-    <div class="container">
+    <div id="entirePage" class="container hidden">
         <section id="homepage">
             <p>Enter your text or upload an image to extract text:</p>
             <form id="inputForm">
@@ -46,6 +47,7 @@
                 <h2>Export Options</h2>
                 <button id="copyClipboard">Copy to Clipboard</button>
                 <button id="downloadPDF" class="hidden">Download PDF</button>
+                <p id="clipboardToast"></p>
             </div>
         </section>
     </div>
