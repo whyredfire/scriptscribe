@@ -25,9 +25,9 @@ def check_user(username, jsondb):
             return True
     return False
 
-def salty_pass(password):
+def salty_pass(username, password):
     salt = 'scriptscribeftw'
-    salted_pass = password + salt
+    salted_pass = username + salt + password
 
     hashed_pass = hashlib.md5(salted_pass.encode())
     return hashed_pass.hexdigest()
@@ -58,7 +58,7 @@ def auth():
         user_list = user_data.get("users", [])
         for user in user_list:
             if user['username'] == username:
-                if (salty_pass(password) == user['password']):
+                if (salty_pass(username, password) == user['password']):
                     return True
         return False
 
@@ -92,7 +92,7 @@ def signup():
             'isSuccessful': False
             }), 200
 
-    hashed_pass = salty_pass(password)
+    hashed_pass = salty_pass(username, password)
 
     new_user = {
         "username": username,
