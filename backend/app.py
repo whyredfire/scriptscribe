@@ -15,7 +15,7 @@ import textwrap
 app = Flask(__name__)
 CORS(app)
 
-def check_user(username, json_data, jsondb):
+def check_user(username, jsondb):
     with open(jsondb, "r") as file:
         user_data = json.load(file)
 
@@ -45,7 +45,7 @@ def auth():
     username = data['username']
     password = data['password']
 
-    if not check_user(username, data, "users.json"):
+    if not check_user(username, "users.json"):
         return jsonify({
             'message': 'user does not exist',
             'isSuccessful': False
@@ -86,7 +86,7 @@ def signup():
     username = data['username']
     password = data['password']
 
-    if check_user(username, data, "users.json"):
+    if check_user(username, "users.json"):
         return jsonify({
             'message': 'username already taken',
             'isSuccessful': False
