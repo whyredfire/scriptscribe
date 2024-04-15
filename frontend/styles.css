@@ -25,6 +25,10 @@ footer {
     margin-top: auto;
 }
 
+#homepage p {
+    margin-top: 20px;
+}
+
 .container {
     max-width: 800px;
     margin: 20px auto;
@@ -114,4 +118,12 @@ button:hover {
 .auth-buttons {
     display: flex;
     justify-content: space-around;
+}
+
+#extractionPage h2 {
+    margin-top: 25px;
+}
+
+.export-options h2 {
+    margin-bottom: 10px;
 }
