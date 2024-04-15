@@ -91,6 +91,10 @@ signupButton.addEventListener('click', async (event) => {
     if (!data["isSuccessful"]) {
         errorMessage.innerText = `${data['message']}`;
         errorMessage.style.color = 'red';
+    } else {
+        errorMessage.innerText = 'user signed up!';
+        usernameInput.value = '';
+        passwordInput.value = '';
     }
 });
 
