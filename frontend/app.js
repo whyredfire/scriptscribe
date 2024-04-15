@@ -9,11 +9,15 @@ const extractionPage = document.getElementById('extractionPage');
 const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
+const entirePage = document.getElementById('entirePage');
 const authContainer = document.querySelector('.auth-container');
 const usernameInput = document.getElementById('authUsername');
 const passwordInput = document.getElementById('authPassword');
 const loginButton = document.getElementById('loginButton');
 const signupButton = document.getElementById('signupButton');
+
+const errorMessage = document.getElementById('errorMessage');
+const clipboardToast = document.getElementById('clipboardToast');
 
 const URL = "http://localhost:5000"
 
@@ -39,7 +43,9 @@ loginButton.addEventListener('click', async (event) => {
     };
 
     if (username == '' || password == '') {
-        alert("username or password can't be empty");
+        errorMessage.innerText = 'username or password empty';
+        console.log(errorMessage.innerText);
+        errorMessage.style.color = 'red';
         return;
     }
 
@@ -55,11 +61,12 @@ loginButton.addEventListener('click', async (event) => {
 
     if (data["isSuccesful"]) {
         console.log(`user: ${username} logged in`);
-        alert(`Signed in!`);
         authContainer.remove();
+        entirePage.classList.remove('hidden');
     } else {
         console.log(`user: ${username} failed to log in`);
-        alert(`${data[message]}`);
+        errorMessage.innerText = `${data['message']}`;
+        errorMessage.style.color = 'red';
         resetForm();
     }
 });
@@ -75,7 +82,9 @@ signupButton.addEventListener('click', async (event) => {
     };
 
     if (username == '' || password == '') {
-        alert("username or password can't be empty");
+        errorMessage.innerText = 'username or password empty';
+        console.log(errorMessage.innerText);
+        errorMessage.style.color = 'red';
         return;
     }
 
@@ -92,10 +101,10 @@ signupButton.addEventListener('click', async (event) => {
 
     if (data["isSuccesful"]) {
         console.log(`user: ${username} signed up`);
-        alert(`Signed up!`);
     } else {
         console.log(`user: ${username} failed to sign up`);
-        alert(`${data[message]}`);
+        errorMessage.innerText = `${data['message']}`;
+        errorMessage.style.color = 'red';
         resetForm();
     }
 });
@@ -142,7 +151,7 @@ summarizeButton.addEventListener('click', async () => {
 copyClipboard.addEventListener('click', async () => {
     const summary = summarizedText.innerHTML;
     await navigator.clipboard.writeText(summary);
-    alert("Summary copied to clipboard!");
+    clipboardToast.innerText = 'Copied to clipboard!';
 });
 
 downloadPdf.addEventListener('click', async () => {
