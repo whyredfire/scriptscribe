@@ -9,6 +9,8 @@ const clipboardToast = document.getElementById('clipboardToast');
 
 const URL = "http://localhost:5000"
 
+localStorage.setItem('isLoggedIn', 'false');
+
 loginButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
@@ -36,6 +38,7 @@ loginButton.addEventListener('click', async (event) => {
     const data = await response.json();
 
     if (data["isSuccessful"]) {
+        localStorage.setItem('isLoggedIn', 'true');
         window.location.href = "main.html";
     } else {
         errorMessage.innerText = `${data['message']}`;
