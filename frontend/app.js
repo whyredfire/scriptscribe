@@ -26,12 +26,6 @@ const autoResize = () => {
     textInput.style.height = `${textInput.scrollHeight}px`;
 };
 
-const resetForm = () => {
-    console.log('Resetting form...');
-    usernameInput.innerText = '';
-    passwordInput.innerText = '';
-};
-
 loginButton.addEventListener('click', async (event) => {
     event.preventDefault();
 
@@ -44,7 +38,6 @@ loginButton.addEventListener('click', async (event) => {
 
     if (username == '' || password == '') {
         errorMessage.innerText = 'username or password empty';
-        console.log(errorMessage.innerText);
         errorMessage.style.color = 'red';
         return;
     }
@@ -60,14 +53,11 @@ loginButton.addEventListener('click', async (event) => {
     const data = await response.json();
 
     if (data["isSuccessful"]) {
-        console.log(`user: ${username} logged in`);
         authContainer.remove();
         entirePage.classList.remove('hidden');
     } else {
-        console.log(`user: ${username} failed to log in`);
         errorMessage.innerText = `${data['message']}`;
         errorMessage.style.color = 'red';
-        resetForm();
     }
 });
 
@@ -83,7 +73,6 @@ signupButton.addEventListener('click', async (event) => {
 
     if (username == '' || password == '') {
         errorMessage.innerText = 'username or password empty';
-        console.log(errorMessage.innerText);
         errorMessage.style.color = 'red';
         return;
     }
@@ -99,13 +88,9 @@ signupButton.addEventListener('click', async (event) => {
     const data = await response.json();
     console.log(data)
 
-    if (data["isSuccessful"]) {
-        console.log(`user: ${username} signed up`);
-    } else {
-        console.log(`user: ${username} failed to sign up`);
+    if (!data["isSuccessful"]) {
         errorMessage.innerText = `${data['message']}`;
         errorMessage.style.color = 'red';
-        resetForm();
     }
 });
 
