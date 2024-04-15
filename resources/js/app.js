@@ -9,94 +9,12 @@ const extractionPage = document.getElementById('extractionPage');
 const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
-const entirePage = document.getElementById('entirePage');
-const authContainer = document.querySelector('.auth-container');
-const usernameInput = document.getElementById('authUsername');
-const passwordInput = document.getElementById('authPassword');
-const loginButton = document.getElementById('loginButton');
-const signupButton = document.getElementById('signupButton');
-
-const errorMessage = document.getElementById('errorMessage');
-const clipboardToast = document.getElementById('clipboardToast');
-
 const URL = "http://localhost:5000"
 
 const autoResize = () => {
     textInput.style.height = 'auto';
     textInput.style.height = `${textInput.scrollHeight}px`;
 };
-
-loginButton.addEventListener('click', async (event) => {
-    event.preventDefault();
-
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-    const jsonData = {
-        "username": `${username}`,
-        "password": `${password}`
-    };
-
-    if (username == '' || password == '') {
-        errorMessage.innerText = 'username or password empty';
-        errorMessage.style.color = 'red';
-        return;
-    }
-
-    const response = await fetch(`${URL}/login`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-    });
-
-    const data = await response.json();
-
-    if (data["isSuccessful"]) {
-        authContainer.remove();
-        entirePage.classList.remove('hidden');
-    } else {
-        errorMessage.innerText = `${data['message']}`;
-        errorMessage.style.color = 'red';
-    }
-});
-
-signupButton.addEventListener('click', async (event) => {
-    event.preventDefault();
-
-    const username = usernameInput.value;
-    const password = passwordInput.value;
-    const jsonData = {
-        "username": `${username}`,
-        "password": `${password}`
-    };
-
-    if (username == '' || password == '') {
-        errorMessage.innerText = 'username or password empty';
-        errorMessage.style.color = 'red';
-        return;
-    }
-
-    const response = await fetch(`${URL}/signup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(jsonData)
-    });
-
-    const data = await response.json();
-    console.log(data)
-
-    if (!data["isSuccessful"]) {
-        errorMessage.innerText = `${data['message']}`;
-        errorMessage.style.color = 'red';
-    } else {
-        errorMessage.innerText = 'user signed up!';
-        usernameInput.value = '';
-        passwordInput.value = '';
-    }
-});
 
 inputForm.addEventListener('submit', async (event) => {
     event.preventDefault();

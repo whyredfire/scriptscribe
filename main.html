@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ScriptScribe - Extract, Summarize, Export</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="resources/css/styles.css">
 </head>
 <body>
     <header>
@@ -12,22 +12,7 @@
         <p>Extract, Summarize, Export</p>
     </header>
 
-    <div class="auth-container">
-        <section id="authSection">
-            <h2>Welcome!</h2>
-            <form id="authForm">
-                <input type="text" id="authUsername" placeholder="Username">
-                <input type="password" id="authPassword" placeholder="Password">
-                <p id="errorMessage" align="left"></p>
-                <div class="auth-buttons">
-                    <button type="submit" id="loginButton">Login</button>
-                    <button type="submit" id="signupButton">Sign Up</button>
-                </div>
-            </form>
-        </section>
-    </div>
-
-    <div id="entirePage" class="container hidden">
+    <div class="container">
         <section id="homepage">
             <p><b>Enter your text or upload an image to extract text:</b></p>
             <form id="inputForm">
@@ -57,6 +42,6 @@
             <p>Made with ❤️ by Team ScriptScribe.</p>
         </div>
     </footer>
-    <script src="app.js"></script>
+    <script src="resources/js/app.js"></script>
 </body>
 </html>
