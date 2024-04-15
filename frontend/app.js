@@ -59,7 +59,7 @@ loginButton.addEventListener('click', async (event) => {
 
     const data = await response.json();
 
-    if (data["isSuccesful"]) {
+    if (data["isSuccessful"]) {
         console.log(`user: ${username} logged in`);
         authContainer.remove();
         entirePage.classList.remove('hidden');
@@ -99,7 +99,7 @@ signupButton.addEventListener('click', async (event) => {
     const data = await response.json();
     console.log(data)
 
-    if (data["isSuccesful"]) {
+    if (data["isSuccessful"]) {
         console.log(`user: ${username} signed up`);
     } else {
         console.log(`user: ${username} failed to sign up`);
