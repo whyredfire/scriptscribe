@@ -39,7 +39,7 @@ def auth():
     if 'username' not in data or 'password' not in data:
         return jsonify({
             'message': 'either username or password missing',
-            'isSuccesful': False
+            'isSuccessful': False
             }), 200
     
     username = data['username']
@@ -48,7 +48,7 @@ def auth():
     if not check_user(username, data, "users.json"):
         return jsonify({
             'message': 'user does not exist',
-            'isSuccesful': False
+            'isSuccessful': False
             }), 200
     
     def user_auth(username, password):
@@ -65,12 +65,12 @@ def auth():
     if user_auth(username, password):
         return jsonify({
             'message': 'logged in',
-            'isSuccesful': True
+            'isSuccessful': True
             }), 200
     else:
         return jsonify({
             'message': 'incorrect password',
-            'isSuccesful': False
+            'isSuccessful': False
             }), 200
     
 @app.route('/signup', methods=['POST'])
@@ -80,7 +80,7 @@ def signup():
     if 'username' not in data or 'password' not in data:
         return jsonify({
             'message': 'either username or password missing',
-            'isSuccesful': False
+            'isSuccessful': False
         }), 200
 
     username = data['username']
@@ -89,7 +89,7 @@ def signup():
     if check_user(username, data, "users.json"):
         return jsonify({
             'message': 'username already taken',
-            'isSuccesful': False
+            'isSuccessful': False
             }), 200
 
     hashed_pass = salty_pass(password)
@@ -108,14 +108,16 @@ def signup():
 
     return jsonify({
         'message': 'signed up',
-        'isSuccesful': True
+        'isSuccessful': True
         }), 200
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
     if 'image' not in request.files:
         return jsonify({
-            'error': 'No file uploaded'}), 400
+            'message': 'No file uploaded',
+            'isSuccessful': False
+            }), 200
 
     file = request.files['image']
     img = Image.open(file.stream)
@@ -124,14 +126,20 @@ def ocr():
     recognized_text = pytesseract.image_to_string(img, config=custom_config)
     recognized_text = recognized_text.replace('\n', ' ')
 
-    return jsonify({'text': recognized_text}), 200
+    return jsonify({
+        'text': recognized_text,
+        'isSuccessful': True
+        }), 200
 
 @app.route('/summarize', methods=['POST'])
 def summarize():
     data = request.get_json()
 
     if 'text' not in data:
-        return jsonify({'error': 'Text field is required'}), 400
+        return jsonify({
+            'message': 'Text field is required',
+            'isSuccessful': False
+            }), 200
 
     text = data['text']
     sentences = nltk.sent_tokenize(text)
@@ -166,14 +174,20 @@ def summarize():
     summary_sentences = heapq.nlargest(num_sentences, sentence_scores, key=sentence_scores.get)
     summary = ' '.join(summary_sentences)
 
-    return jsonify({'summary': summary}), 200
+    return jsonify({
+        'summary': summary,
+        'isSuccessful': True
+        }), 200
 
 @app.route('/exportpdf', methods=['POST'])
 def exportPdf():
     data = request.get_json()
 
     if 'text' not in data or 'summary' not in data:
-        return jsonify({'error': 'Text and summary fields are required'}), 400
+        return jsonify({
+            'message': 'Text and summary fields are required',
+            'isSuccessful': False
+            }), 200
 
     for file in os.listdir():
         if file.endswith('.pdf'):
@@ -222,7 +236,10 @@ def exportPdf():
     pdf.output(pdf_path, 'F')
 
     if not os.path.exists(pdf_path):
-        return jsonify({'error': 'PDF file not found'}), 404
+        return jsonify({
+            'message': 'PDF file not found',
+            'isSuccessful': False
+            }), 200
 
     return send_file(pdf_path, as_attachment=True), 200
 
