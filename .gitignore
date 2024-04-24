@@ -3,4 +3,5 @@
 */*.pdf
 *.pdf
 */__pycache__
+mongodb/data
 venv
