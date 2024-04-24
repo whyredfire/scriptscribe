@@ -177,7 +177,7 @@ def exportPdf():
         return jsonify({
             'message': 'Text and summary fields are required',
             'isSuccessful': False
-            }), 200
+        }), 400
 
     for file in os.listdir():
         if file.endswith('.pdf'):
@@ -187,7 +187,7 @@ def exportPdf():
     summary = data['summary']
 
     a4_width_mm = 210
-    pt_to_mm = 0.35
+    pt_to_mm = 0.3528
     fontsize_pt = 10
     fontsize_mm = fontsize_pt * pt_to_mm
     margin_bottom_mm = 10
@@ -197,14 +197,12 @@ def exportPdf():
     pdf = FPDF(orientation='P', unit='mm', format='A4')
     pdf.set_auto_page_break(True, margin=margin_bottom_mm)
     pdf.add_page()
-    pdf.set_font(family='Courier', size=fontsize_pt)
-
+    
     pdf.set_font('Courier', 'B', 16)
     pdf.cell(200, 10, txt="ScriptScribe", ln=1, align='C')
 
     pdf.set_line_width(0.5)
     pdf.line(10, pdf.get_y(), 200 - 10, pdf.get_y())
-
     pdf.ln(10)
 
     pdf.set_font('Courier', 'B', fontsize_pt)
@@ -221,15 +219,14 @@ def exportPdf():
 
     current_time = datetime.datetime.now()
     timestamp = current_time.strftime("%y%m%d_%H%M%S")
-    pdf_path = f"scriptscribe_exported-{timestamp}.pdf" 
-
+    pdf_path = f"scriptscribe_exported-{timestamp}.pdf"
     pdf.output(pdf_path, 'F')
 
     if not os.path.exists(pdf_path):
         return jsonify({
             'message': 'PDF file not found',
             'isSuccessful': False
-            }), 200
+        }), 500
 
     return send_file(pdf_path, as_attachment=True), 200
 
@@ -238,8 +235,7 @@ def process_text(pdf, text, width_text, fontsize_mm):
     for line in lines:
         wrapped_lines = textwrap.wrap(line, width_text)
         for wrapped_line in wrapped_lines:
-            pdf.cell(0, fontsize_mm, wrapped_line, ln=1)
-
+            pdf.multi_cell(0, fontsize_mm, wrapped_line)
         if len(wrapped_lines) > 1:
             pdf.ln()
 
