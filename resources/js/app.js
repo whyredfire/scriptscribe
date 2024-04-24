@@ -10,13 +10,16 @@ const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
 const isLoggedIn = localStorage.getItem('isLoggedIn');
+const showUsername = document.getElementById('showUsername');
 
 const URL = "http://localhost:5000"
 
 if (isLoggedIn == 'false') {
     window.location.href = 'index.html';
 } else {
-    console.log('User is authenticated!');
+    const username = localStorage.getItem('username');
+    console.log(`User ${username} is authenticated!`);
+    showUsername.innerText = username;
 }
 
 const autoResize = () => {
