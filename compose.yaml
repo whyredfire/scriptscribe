@@ -22,3 +22,14 @@ services:
       - .:/usr/share/nginx/html
     depends_on:
       - backend
+
+  mongodb:
+    build:
+      context: ./mongodb
+      dockerfile: Dockerfile
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    depends_on:
+      - backend
