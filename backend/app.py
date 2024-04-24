@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response, send_file
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from fpdf import FPDF
 from PIL import Image
@@ -76,7 +76,7 @@ def auth():
     
 @app.route('/signup', methods=['POST'])
 def signup():
-    def add_user(username, password):
+    def add_user(username, hashed_pass):
         new_user = {
             "username": username,
             "password": hashed_pass
@@ -98,7 +98,7 @@ def signup():
 
     hashed_pass = salty_pass(username, password)
 
-    if (add_user(username, password)):
+    if (add_user(username, hashed_pass)):
         return jsonify({
             'message': 'signed up',
             'isSuccessful': True
