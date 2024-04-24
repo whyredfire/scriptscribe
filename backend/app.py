@@ -2,11 +2,10 @@ from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
 from fpdf import FPDF
 from PIL import Image
+from pymongo import MongoClient
 import datetime
 import hashlib
 import heapq
-import json
-import numpy as np
 import nltk
 import os
 import pytesseract
@@ -15,13 +14,21 @@ import textwrap
 app = Flask(__name__)
 CORS(app)
 
-def check_user(username, jsondb):
-    with open(jsondb, "r") as file:
-        user_data = json.load(file)
+connection_string = "mongodb://localhost:27017/"
+client = MongoClient(connection_string)
+collection = client.scriptscribe.users
 
-    user_list = user_data.get("users", [])
-    for user in user_list:
-        if user['username'] == username:
+def validate_creds(data):
+    if 'username' not in data or 'password' not in data:
+        return jsonify({
+            'message': 'either username or password missing',
+            'isSuccessful': False
+            }), 200
+
+def check_user(username):
+    users = list(collection.find())
+    for user in users:
+        if user.get('username') == username:
             return True
     return False
 
@@ -34,33 +41,24 @@ def salty_pass(username, password):
 
 @app.route('/login', methods=['POST'])
 def auth():
-    data = request.get_json()
+    def user_auth(username, password):
+        users = list(collection.find())
+        for user in users:
+            if user.get('username') == username and user.get('password') == salty_pass(username, password):
+                return True
+        return False
 
-    if 'username' not in data or 'password' not in data:
-        return jsonify({
-            'message': 'either username or password missing',
-            'isSuccessful': False
-            }), 200
+    data = request.get_json()
+    validate_creds(data);
     
     username = data['username']
     password = data['password']
 
-    if not check_user(username, "users.json"):
+    if not check_user(username):
         return jsonify({
             'message': 'user does not exist',
             'isSuccessful': False
             }), 200
-    
-    def user_auth(username, password):
-        with open("users.json", "r") as file:
-            user_data = json.load(file)
-
-        user_list = user_data.get("users", [])
-        for user in user_list:
-            if user['username'] == username:
-                if (salty_pass(username, password) == user['password']):
-                    return True
-        return False
 
     if user_auth(username, password):
         return jsonify({
@@ -75,18 +73,21 @@ def auth():
     
 @app.route('/signup', methods=['POST'])
 def signup():
-    data = request.get_json()
+    def add_user(username, password):
+        new_user = {
+            "username": username,
+            "password": hashed_pass
+        }
+        inserted_id = collection.insert_one(new_user).inserted_id
+        return inserted_id
 
-    if 'username' not in data or 'password' not in data:
-        return jsonify({
-            'message': 'either username or password missing',
-            'isSuccessful': False
-        }), 200
+    data = request.get_json()
+    validate_creds(data);
 
     username = data['username']
     password = data['password']
 
-    if check_user(username, "users.json"):
+    if check_user(username):
         return jsonify({
             'message': 'username already taken',
             'isSuccessful': False
@@ -94,22 +95,11 @@ def signup():
 
     hashed_pass = salty_pass(username, password)
 
-    new_user = {
-        "username": username,
-        "password": hashed_pass
-    }
-
-    with open("users.json", "r") as file:
-        user_data = json.load(file)
-        user_data["users"].append(new_user)
-
-    with open("users.json", "w") as file:
-        json.dump(user_data, file, indent=4)
-
-    return jsonify({
-        'message': 'signed up',
-        'isSuccessful': True
-        }), 200
+    if (add_user(username, password)):
+        return jsonify({
+            'message': 'signed up',
+            'isSuccessful': True
+            }), 200
 
 @app.route('/ocr', methods=['POST'])
 def ocr():
