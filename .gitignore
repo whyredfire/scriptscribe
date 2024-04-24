@@ -1,4 +1,6 @@
-venv
+.vscode
 .DS_Store
-backend/*.pdf
-backend/__pycache__
+*/*.pdf
+*.pdf
+*/__pycache__
+venv
