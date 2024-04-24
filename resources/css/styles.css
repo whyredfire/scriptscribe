@@ -21,6 +21,15 @@ header, footer {
     padding: 20px 0;
 }
 
+header {
+    justify-content: space-between;
+    align-items: center;
+}
+
+#showUsername {
+    padding-right: 20px;
+}
+
 footer {
     margin-top: auto;
 }
