@@ -10,6 +10,7 @@ const copyClipboard = document.getElementById('copyClipboard');
 const downloadPdf = document.getElementById('downloadPDF');
 
 const isLoggedIn = localStorage.getItem('isLoggedIn');
+const logoutButton = document.getElementById('logout');
 const showUsername = document.getElementById('showUsername');
 
 const URL = "http://localhost:5000"
@@ -21,6 +22,13 @@ if (isLoggedIn == 'false') {
     console.log(`User ${username} is authenticated!`);
     showUsername.innerText = username;
 }
+
+logoutButton.addEventListener('click', () => {
+    localStorage.setItem('isLoggedIn', 'false');
+    localStorage.setItem('username', '');
+    showUsername.innerText = '';
+    window.location.href = 'index.html';
+});
 
 const autoResize = () => {
     textInput.style.height = 'auto';

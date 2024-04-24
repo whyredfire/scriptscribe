@@ -30,6 +30,10 @@ header {
     padding-right: 20px;
 }
 
+#logout {
+    cursor: pointer;
+}
+
 footer {
     margin-top: auto;
 }
