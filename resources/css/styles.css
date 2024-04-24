@@ -19,27 +19,33 @@ header, footer {
     color: #fff;
     text-align: center;
     padding: 20px 0;
-}
-
-header {
+    display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-#showUsername {
-    padding-right: 20px;
+.branding {
+    flex: 1;
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+}
+
+#showUsername,
+#logout {
+    margin-left: 10px;
 }
 
 #logout {
     cursor: pointer;
+    padding: 8px;
+    margin-right: 20px;
 }
 
 footer {
     margin-top: auto;
-}
-
-#homepage p {
-    margin-top: 20px;
 }
 
 .container {
