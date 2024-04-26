@@ -4,6 +4,7 @@ const fileInput = document.getElementById('fileInput');
 
 const summarizeButton = document.getElementById('summarizeButton');
 const summarizedText = document.getElementById('summarizedText');
+const summarySize = document.getElementById('summarySize');
 const extractionPage = document.getElementById('extractionPage');
 
 const copyClipboard = document.getElementById('copyClipboard');
@@ -56,8 +57,12 @@ textInput.addEventListener('input', autoResize);
 
 summarizeButton.addEventListener('click', async () => {
     const extractedText = textInput.value;
+    const summaryLength = summarySize.value;
+    console.log(summaryLength);
+
     const jsonData = {
-        "text" : `${extractedText}`
+        "text" : `${extractedText}`,
+        "summaryLevel" : `${summaryLength}`
     };
 
     const response = await fetch(`${URL}/summarize`, {
