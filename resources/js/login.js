@@ -21,12 +21,6 @@ loginButton.addEventListener('click', async (event) => {
         "password": `${password}`
     };
 
-    if (username == '' || password == '') {
-        errorMessage.innerText = 'username or password empty';
-        errorMessage.style.color = 'red';
-        return;
-    }
-
     const response = await fetch(`${URL}/login`, {
         method: 'POST',
         headers: {
@@ -56,12 +50,6 @@ signupButton.addEventListener('click', async (event) => {
         "username": `${username}`,
         "password": `${password}`
     };
-
-    if (username == '' || password == '') {
-        errorMessage.innerText = 'username or password empty';
-        errorMessage.style.color = 'red';
-        return;
-    }
 
     const response = await fetch(`${URL}/signup`, {
         method: 'POST',

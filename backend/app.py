@@ -21,10 +21,15 @@ connection_string = f"mongodb://{host}:{port}/"
 client = MongoClient(connection_string)
 collection = client.scriptscribe.users
 
-def validate_creds(data):
-    if 'username' not in data or 'password' not in data:
+def validate_creds(username, password):
+    if not username:
         return jsonify({
-            'message': 'either username or password missing',
+            'message': 'username cannot be empty',
+            'isSuccessful': False
+            }), 200
+    elif not password:
+        return jsonify({
+            'message': 'password cannot be empty',
             'isSuccessful': False
             }), 200
 
@@ -52,11 +57,13 @@ def auth():
         return False
 
     data = request.get_json()
-    validate_creds(data);
-    
     username = data['username']
     password = data['password']
 
+    response = validate_creds(username, password)
+    if response:
+        return response
+    
     if not check_user(username):
         return jsonify({
             'message': 'user does not exist',
@@ -85,10 +92,12 @@ def signup():
         return inserted_id
 
     data = request.get_json()
-    validate_creds(data);
-
     username = data['username']
     password = data['password']
+
+    response = validate_creds(username, password)
+    if response:
+        return response
 
     if check_user(username):
         return jsonify({
