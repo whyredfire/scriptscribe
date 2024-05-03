@@ -1,18 +1,21 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, make_response, send_file
 from flask_cors import CORS
 from fpdf import FPDF
+from functools import wraps
 from PIL import Image
 from pymongo import MongoClient
 import datetime
 import hashlib
 import heapq
+import jwt
 import nltk
 import os
 import pytesseract
 import textwrap
+import time
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 host = os.environ.get('MONGO_HOST', 'localhost') 
 port = os.environ.get('MONGO_PORT', '27017')
@@ -20,6 +23,34 @@ connection_string = f'mongodb://{host}:{port}/'
 
 client = MongoClient(connection_string)
 collection = client.scriptscribe.users
+
+SECRET = 'scriptscribeftw'
+
+def custom_auth(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        token = request.cookies.get('token')
+        verified_payload = verify_token(token)
+        if isinstance(verified_payload, dict):
+            return func(*args, **kwargs)
+    return wrapper
+
+def gen_token(username):
+    payload = {
+        'username': username,
+        'timestamp': int(time.time())
+    }
+    token = jwt.encode(payload, SECRET, algorithm='HS256')
+    return token
+
+def verify_token(token):
+    try:
+        payload = jwt.decode(token, SECRET, algorithms='HS256')
+        return payload
+    except jwt.ExpiredSignatureError:
+        return 'Token has expired'
+    except jwt.InvalidTokenError:
+        return 'Invalid token'
 
 def validate_creds(username, password):
     if not username:
@@ -71,10 +102,13 @@ def auth():
             }), 200
 
     if user_auth(username, password):
-        return jsonify({
+        token = gen_token(username)
+        payload = jsonify({
             'message': 'logged in',
             'isSuccessful': True
-            }), 200
+            })
+        payload.set_cookie('token', token) 
+        return payload, 200
     else:
         return jsonify({
             'message': 'incorrect password',
@@ -114,6 +148,7 @@ def signup():
             }), 200
 
 @app.route('/ocr', methods=['POST'])
+@custom_auth
 def ocr():
     if 'image' not in request.files:
         return jsonify({
@@ -134,6 +169,7 @@ def ocr():
         }), 200
 
 @app.route('/summarize', methods=['POST'])
+@custom_auth
 def summarize():
     data = request.get_json()
 
@@ -183,6 +219,7 @@ def summarize():
         }), 200
 
 @app.route('/exportpdf', methods=['POST'])
+@custom_auth
 def exportPdf():
     data = request.get_json()
 
