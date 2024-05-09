@@ -16,7 +16,7 @@ CORS(app)
 
 host = os.environ.get('MONGO_HOST', 'localhost') 
 port = os.environ.get('MONGO_PORT', '27017')
-connection_string = f"mongodb://{host}:{port}/"
+connection_string = f'mongodb://{host}:{port}/'
 
 client = MongoClient(connection_string)
 collection = client.scriptscribe.users
@@ -85,8 +85,8 @@ def auth():
 def signup():
     def add_user(username, hashed_pass):
         new_user = {
-            "username": username,
-            "password": hashed_pass
+            'username': username,
+            'password': hashed_pass
         }
         inserted_id = collection.insert_one(new_user).inserted_id
         return inserted_id
