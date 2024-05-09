@@ -7,7 +7,7 @@ const signupButton = document.getElementById('signupButton');
 const errorMessage = document.getElementById('errorMessage');
 const clipboardToast = document.getElementById('clipboardToast');
 
-const URL = "http://localhost:5000"
+const URL = 'http://localhost:5000';
 
 localStorage.setItem('isLoggedIn', 'false');
 
@@ -17,8 +17,8 @@ loginButton.addEventListener('click', async (event) => {
     const username = usernameInput.value;
     const password = passwordInput.value;
     const jsonData = {
-        "username": `${username}`,
-        "password": `${password}`
+        'username': `${username}`,
+        'password': `${password}`
     };
 
     const response = await fetch(`${URL}/login`, {
@@ -31,10 +31,10 @@ loginButton.addEventListener('click', async (event) => {
 
     const data = await response.json();
 
-    if (data["isSuccessful"]) {
+    if (data['isSuccessful']) {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', username);
-        window.location.href = "main.html";
+        window.location.href = 'main.html';
     } else {
         errorMessage.innerText = `${data['message']}`;
         errorMessage.style.color = 'red';
@@ -47,8 +47,8 @@ signupButton.addEventListener('click', async (event) => {
     const username = usernameInput.value;
     const password = passwordInput.value;
     const jsonData = {
-        "username": `${username}`,
-        "password": `${password}`
+        'username': `${username}`,
+        'password': `${password}`
     };
 
     const response = await fetch(`${URL}/signup`, {
@@ -60,7 +60,6 @@ signupButton.addEventListener('click', async (event) => {
     });
 
     const data = await response.json();
-    console.log(data)
 
     if (!data["isSuccessful"]) {
         errorMessage.innerText = `${data['message']}`;

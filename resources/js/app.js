@@ -14,13 +14,12 @@ const isLoggedIn = localStorage.getItem('isLoggedIn');
 const logoutButton = document.getElementById('logout');
 const showUsername = document.getElementById('showUsername');
 
-const URL = "http://localhost:5000"
+const URL = 'http://localhost:5000';
 
 if (isLoggedIn == 'false') {
     window.location.href = 'index.html';
 } else {
     const username = localStorage.getItem('username');
-    console.log(`User ${username} is authenticated!`);
     showUsername.innerText = username;
 }
 
@@ -58,11 +57,10 @@ textInput.addEventListener('input', autoResize);
 summarizeButton.addEventListener('click', async () => {
     const extractedText = textInput.value;
     const summaryLength = summarySize.value;
-    console.log(summaryLength);
 
     const jsonData = {
-        "text" : `${extractedText}`,
-        "summaryLevel" : `${summaryLength}`
+        'text' : `${extractedText}`,
+        'summaryLevel' : `${summaryLength}`
     };
 
     const response = await fetch(`${URL}/summarize`, {
@@ -90,8 +88,8 @@ downloadPdf.addEventListener('click', async () => {
     const summary = summarizedText.innerHTML;
 
     const jsonData = {
-        "text": `${extractedText}`,
-        "summary": `${summary}`
+        'text': `${extractedText}`,
+        'summary': `${summary}`
     }
 
     fetch(`${URL}/exportpdf`, {
