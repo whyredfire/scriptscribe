@@ -15,7 +15,7 @@ import textwrap
 import time
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+CORS(app, origins=["http://localhost:5500"], supports_credentials=True)
 
 host = os.environ.get('MONGO_HOST', 'localhost') 
 port = os.environ.get('MONGO_PORT', '27017')
@@ -103,12 +103,12 @@ def auth():
 
     if user_auth(username, password):
         token = gen_token(username)
-        payload = jsonify({
+        response = make_response(jsonify({
             'message': 'logged in',
             'isSuccessful': True
-            })
-        payload.set_cookie('token', token) 
-        return payload, 200
+        }))
+        response.set_cookie('token', token)
+        return response, 200
     else:
         return jsonify({
             'message': 'incorrect password',
