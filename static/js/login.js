@@ -34,7 +34,7 @@ loginButton.addEventListener('click', async (event) => {
     if (data['isSuccessful']) {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('username', username);
-        window.location.href = 'main.html';
+        window.location.href = '/main';
     } else {
         errorMessage.innerText = `${data['message']}`;
         errorMessage.style.color = 'red';

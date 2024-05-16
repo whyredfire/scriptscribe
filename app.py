@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, redirect, render_template, send_file, url_for
 from flask_cors import CORS
 from fpdf import FPDF
 from PIL import Image
@@ -46,6 +46,18 @@ def salty_pass(username, password):
 
     hashed_pass = hashlib.md5(salted_pass.encode())
     return hashed_pass.hexdigest()
+
+@app.route('/')
+def home():
+    return redirect(url_for('login'))
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/main')
+def main():
+    return render_template('main.html')
 
 @app.route('/login', methods=['POST'])
 def auth():

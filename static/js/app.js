@@ -17,7 +17,7 @@ const showUsername = document.getElementById('showUsername');
 const URL = 'http://localhost:5000';
 
 if (isLoggedIn == 'false') {
-    window.location.href = 'index.html';
+    window.location.href = '/login';
 } else {
     const username = localStorage.getItem('username');
     showUsername.innerText = username;
@@ -27,7 +27,7 @@ logoutButton.addEventListener('click', () => {
     localStorage.setItem('isLoggedIn', 'false');
     localStorage.setItem('username', '');
     showUsername.innerText = '';
-    window.location.href = 'index.html';
+    window.location.href = '/login';
 });
 
 const autoResize = () => {

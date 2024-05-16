@@ -1,6 +1,5 @@
 .vscode
 .DS_Store
-*/*.pdf
 *.pdf
 */__pycache__
 mongodb/data
