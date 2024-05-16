@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ScriptScribe - Login</title>
-    <link rel="stylesheet" href="../static/css/styles.css">
-</head>
-<body>
-    <header>
-        <div class="branding">
-            <h1>ScriptScribe</h1>
-            <p>Extract, Summarize, Export</p>
-        </div>
-        <div class="avatar">
-            <p id="showUsername"></p>
-            <p id="logout"></p>
-        </div>
-    </header>
-    
-    <div class="auth-container">
-        <section id="authSection">
-            <h2>Welcome!</h2>
-            <form id="authForm">
-                <input type="text" id="authUsername" placeholder="Username">
-                <input type="password" id="authPassword" placeholder="Password">
-                <p id="errorMessage" align="left"></p>
-                <div class="auth-buttons">
-                    <button type="submit" id="loginButton">Login</button>
-                    <button type="submit" id="signupButton">Sign Up</button>
-                </div>
-            </form>
-        </section>
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ScriptScribe - Login</title>
+		<link rel="stylesheet" href="../static/css/styles.css" />
+	</head>
+	<body>
+		<header>
+			<div class="branding">
+				<h1>ScriptScribe</h1>
+				<p>Extract, Summarize, Export</p>
+			</div>
+			<div class="avatar">
+				<p id="showUsername"></p>
+				<p id="logout"></p>
+			</div>
+		</header>
 
-    <footer>
-        <div class="container">
-            <p>Made with ❤️ by Team ScriptScribe.</p>
-        </div>
-    </footer>
-    <script src="../static/js/login.js"></script>
-</body>
+		<div class="auth-container">
+			<section id="authSection">
+				<h2>Welcome!</h2>
+				<form id="authForm">
+					<input
+						type="text"
+						id="authUsername"
+						placeholder="Username"
+					/>
+					<input
+						type="password"
+						id="authPassword"
+						placeholder="Password"
+					/>
+					<p id="errorMessage" align="left"></p>
+					<div class="auth-buttons">
+						<button type="submit" id="loginButton">Login</button>
+						<button type="submit" id="signupButton">Sign Up</button>
+					</div>
+				</form>
+			</section>
+		</div>
+
+		<footer>
+			<div class="container">
+				<p>Made with ❤️ by Team ScriptScribe.</p>
+			</div>
+		</footer>
+		<script src="../static/js/login.js"></script>
+	</body>
 </html>
