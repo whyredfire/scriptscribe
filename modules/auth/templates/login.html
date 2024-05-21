@@ -4,7 +4,10 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>ScriptScribe - Login</title>
-		<link rel="stylesheet" href="../static/css/styles.css" />
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='css/styles.css') }}"
+		/>
 	</head>
 	<body>
 		<header>
@@ -46,6 +49,6 @@
 				<p>Made with ❤️ by Team ScriptScribe.</p>
 			</div>
 		</footer>
-		<script src="../static/js/login.js"></script>
+		<script src="{{ url_for('auth.static', filename='js/login.js') }}"></script>
 	</body>
 </html>
