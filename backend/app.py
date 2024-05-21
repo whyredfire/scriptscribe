@@ -47,7 +47,7 @@ def salty_pass(username, password):
     hashed_pass = hashlib.md5(salted_pass.encode())
     return hashed_pass.hexdigest()
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def auth():
     def user_auth(username, password):
         users = list(collection.find())
@@ -81,7 +81,7 @@ def auth():
             'isSuccessful': False
             }), 200
     
-@app.route('/signup', methods=['POST'])
+@app.route('/api/signup', methods=['POST'])
 def signup():
     def add_user(username, hashed_pass):
         new_user = {
@@ -113,7 +113,7 @@ def signup():
             'isSuccessful': True
             }), 200
 
-@app.route('/ocr', methods=['POST'])
+@app.route('/api/ocr', methods=['POST'])
 def ocr():
     if 'image' not in request.files:
         return jsonify({
@@ -133,7 +133,7 @@ def ocr():
         'isSuccessful': True
         }), 200
 
-@app.route('/summarize', methods=['POST'])
+@app.route('/api/summarize', methods=['POST'])
 def summarize():
     data = request.get_json()
 
@@ -182,7 +182,7 @@ def summarize():
         'isSuccessful': True
         }), 200
 
-@app.route('/exportpdf', methods=['POST'])
+@app.route('/api/exportpdf', methods=['POST'])
 def exportPdf():
     data = request.get_json()
 
