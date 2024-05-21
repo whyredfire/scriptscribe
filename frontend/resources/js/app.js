@@ -14,7 +14,7 @@ const isLoggedIn = localStorage.getItem("isLoggedIn");
 const logoutButton = document.getElementById("logout");
 const showUsername = document.getElementById("showUsername");
 
-const URL = "http://localhost:5000";
+const URL = `${window.origin}/api`;
 
 if (isLoggedIn == "false") {
 	window.location.href = "index.html";

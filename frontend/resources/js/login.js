@@ -7,7 +7,7 @@ const signupButton = document.getElementById("signupButton");
 const errorMessage = document.getElementById("errorMessage");
 const clipboardToast = document.getElementById("clipboardToast");
 
-const URL = "http://localhost:5000";
+const URL = `${window.origin}/api`;
 
 localStorage.setItem("isLoggedIn", "false");
 

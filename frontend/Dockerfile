@@ -1,6 +1,6 @@
-FROM nginx:alpine
+FROM caddy:latest
 
-COPY . /usr/share/nginx/html
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY . /var/www/html
+
 EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]

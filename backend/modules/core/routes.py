@@ -12,7 +12,7 @@ core_bp = Blueprint('core', __name__, static_folder='static',
                     template_folder='templates')
 
 
-@core_bp.route('/ocr', methods=['POST'])
+@core_bp.route('/api/ocr', methods=['POST'])
 def ocr():
     if 'image' not in request.files:
         return jsonify({
@@ -33,7 +33,7 @@ def ocr():
     }), 200
 
 
-@core_bp.route('/summarize', methods=['POST'])
+@core_bp.route('/api/summarize', methods=['POST'])
 def summarize():
     data = request.get_json()
 
@@ -84,7 +84,7 @@ def summarize():
     }), 200
 
 
-@core_bp.route('/exportpdf', methods=['POST'])
+@core_bp.route('/api/exportpdf', methods=['POST'])
 def exportPdf():
     data = request.get_json()
 

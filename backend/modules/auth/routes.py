@@ -43,7 +43,7 @@ def salty_pass(username, password):
     return hashed_pass.hexdigest()
 
 
-@auth_bp.route('/login', methods=['POST'])
+@auth_bp.route('/api/login', methods=['POST'])
 def auth():
     def user_auth(username, password):
         users = list(collection.find())
@@ -78,7 +78,7 @@ def auth():
         }), 200
 
 
-@auth_bp.route('/signup', methods=['POST'])
+@auth_bp.route('/api/signup', methods=['POST'])
 def signup():
     def add_user(username, hashed_pass):
         new_user = {
