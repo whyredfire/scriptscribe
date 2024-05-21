@@ -2,6 +2,7 @@ import unittest
 import json
 from app import app
 
+
 class TestApp(unittest.TestCase):
 
     def setUp(self):
@@ -10,7 +11,8 @@ class TestApp(unittest.TestCase):
 
     def test_ocr(self):
         with open('test_image.jpg', 'rb') as file:
-            response = self.app.post('/ocr', data={'image': (file, 'test_image.jpg')}, content_type='multipart/form-data')
+            response = self.app.post(
+                '/ocr', data={'image': (file, 'test_image.jpg')}, content_type='multipart/form-data')
 
         data = json.loads(response.data.decode('utf-8'))
         self.assertEqual(response.status_code, 200)
@@ -48,7 +50,8 @@ class TestApp(unittest.TestCase):
         print(f"Signup Response Data: {data}")
 
         if 'isSuccessful' in data:
-            self.assertTrue(data['isSuccessful'], f"Signup failed: {data.get('message', 'Unknown error')}")
+            self.assertTrue(data['isSuccessful'], f"Signup failed: {
+                            data.get('message', 'Unknown error')}")
 
     def test_login_non_existing_user(self):
         credentials = {'username': 'nonexistent', 'password': 'password'}
@@ -79,6 +82,7 @@ class TestApp(unittest.TestCase):
         self.assertFalse(data['isSuccessful'])
         self.assertIn('message', data)
         self.assertEqual(data['message'], 'username already taken')
+
 
 if __name__ == '__main__':
     unittest.main()

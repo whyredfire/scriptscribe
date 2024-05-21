@@ -1,7 +1,14 @@
-.vscode
+# dotfiles
 .DS_Store
-*/*.pdf
-*.pdf
-*/__pycache__
-mongodb/data
+.prettierrc
+.vscode
+
+# python
+__pycache__
 venv
+
+# mongodb data
+mongodb/data
+
+# pdfs
+*pdf

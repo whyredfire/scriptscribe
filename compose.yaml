@@ -1,39 +1,39 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./backend:/app
-    environment:
-      - MONGO_HOST=mongodb
-      - MONGO_PORT=27017
-      - TZ=UTC
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        ports:
+            - "5000:5000"
+        volumes:
+            - ./backend:/app
+        environment:
+            - MONGO_HOST=mongodb
+            - MONGO_PORT=27017
+            - TZ=UTC
 
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    volumes:
-      - .:/usr/share/nginx/html
-    depends_on:
-      - backend
+    frontend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            - .:/usr/share/nginx/html
+        depends_on:
+            - backend
 
-  mongodb:
-    build:
-      context: ./mongodb
-      dockerfile: Dockerfile
-    ports:
-      - "27017:27017"
-    expose:
-      - "27017"
-    volumes:
-      - ./mongodb/data:/data/db
-    depends_on:
-      - backend
+    mongodb:
+        build:
+            context: ./mongodb
+            dockerfile: Dockerfile
+        ports:
+            - "27017:27017"
+        expose:
+            - "27017"
+        volumes:
+            - ./mongodb/data:/data/db
+        depends_on:
+            - backend
