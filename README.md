@@ -7,8 +7,3 @@ ScriptScribe is a tool designed to facilitate text processing tasks such as opti
 ```bash
 docker-compose up -d
 ```
-
-## Running testcases
-```bash
-python3 backend/tests.py
-```
