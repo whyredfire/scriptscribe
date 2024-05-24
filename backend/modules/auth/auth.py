@@ -47,12 +47,12 @@ def validate_creds(username, password):
         return jsonify({
             'message': 'username cannot be empty',
             'isSuccessful': False
-        }), 200
+        }), 400
     elif not password:
         return jsonify({
             'message': 'password cannot be empty',
             'isSuccessful': False
-        }), 200
+        }), 400
 
 
 def check_user(username):

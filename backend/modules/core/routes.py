@@ -20,7 +20,7 @@ def ocr():
         return jsonify({
             'message': 'No file uploaded',
             'isSuccessful': False
-        }), 200
+        }), 400
 
     file = request.files['image']
     img = Image.open(file.stream)
@@ -44,7 +44,7 @@ def summarize():
         return jsonify({
             'message': 'Text field is required',
             'isSuccessful': False
-        }), 200
+        }), 400
 
     text = data['text']
     summary_ratio = float(data['summaryLevel']) / 100

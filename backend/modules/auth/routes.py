@@ -27,7 +27,7 @@ def auth():
         return jsonify({
             'message': 'user does not exist',
             'isSuccessful': False
-        }), 200
+        }), 401
 
     if user_auth(username, password):
         token = gen_token(username)
@@ -41,7 +41,7 @@ def auth():
         return jsonify({
             'message': 'incorrect password',
             'isSuccessful': False
-        }), 200
+        }), 401
 
 
 @auth_bp.route('/api/signup', methods=['POST'])
@@ -66,7 +66,7 @@ def signup():
         return jsonify({
             'message': 'username already taken',
             'isSuccessful': False
-        }), 200
+        }), 409
 
     hashed_pass = salty_pass(username, password)
 
@@ -74,4 +74,4 @@ def signup():
         return jsonify({
             'message': 'signed up',
             'isSuccessful': True
-        }), 200
+        }), 201
