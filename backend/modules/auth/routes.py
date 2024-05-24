@@ -1,46 +1,9 @@
-from flask import Blueprint, jsonify, redirect, request
-from pymongo import MongoClient
-import hashlib
-import os
+from config import collection
+from flask import Blueprint, jsonify, make_response, request
+from .auth import check_user, gen_token, salty_pass, validate_creds
 
 auth_bp = Blueprint('auth', __name__, static_folder='static',
                     template_folder='templates')
-
-host = os.environ.get('MONGO_HOST', 'localhost')
-port = os.environ.get('MONGO_PORT', '27017')
-connection_string = f'mongodb://{host}:{port}/'
-
-client = MongoClient(connection_string)
-collection = client.scriptscribe.users
-
-
-def validate_creds(username, password):
-    if not username:
-        return jsonify({
-            'message': 'username cannot be empty',
-            'isSuccessful': False
-        }), 200
-    elif not password:
-        return jsonify({
-            'message': 'password cannot be empty',
-            'isSuccessful': False
-        }), 200
-
-
-def check_user(username):
-    users = list(collection.find())
-    for user in users:
-        if user.get('username') == username:
-            return True
-    return False
-
-
-def salty_pass(username, password):
-    salt = 'scriptscribeftw'
-    salted_pass = username + salt + password
-
-    hashed_pass = hashlib.md5(salted_pass.encode())
-    return hashed_pass.hexdigest()
 
 
 @auth_bp.route('/api/login', methods=['POST'])
@@ -67,10 +30,13 @@ def auth():
         }), 200
 
     if user_auth(username, password):
-        return jsonify({
+        token = gen_token(username)
+        response = make_response(jsonify({
             'message': 'logged in',
             'isSuccessful': True
-        }), 200
+        }))
+        response.set_cookie('token', token)
+        return response, 200
     else:
         return jsonify({
             'message': 'incorrect password',

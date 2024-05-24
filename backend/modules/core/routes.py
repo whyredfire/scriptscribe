@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file
 from fpdf import FPDF
+from modules.auth.auth import token_required
 from PIL import Image
 import datetime
 import heapq
@@ -13,6 +14,7 @@ core_bp = Blueprint('core', __name__, static_folder='static',
 
 
 @core_bp.route('/api/ocr', methods=['POST'])
+@token_required
 def ocr():
     if 'image' not in request.files:
         return jsonify({
@@ -34,6 +36,7 @@ def ocr():
 
 
 @core_bp.route('/api/summarize', methods=['POST'])
+@token_required
 def summarize():
     data = request.get_json()
 
@@ -85,6 +88,7 @@ def summarize():
 
 
 @core_bp.route('/api/exportpdf', methods=['POST'])
+@token_required
 def exportPdf():
     data = request.get_json()
 

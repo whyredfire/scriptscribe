@@ -44,6 +44,7 @@ inputForm.addEventListener("submit", async (event) => {
 	const response = await fetch(`${URL}/ocr`, {
 		method: "POST",
 		body: formData,
+		credentials: "include",
 	});
 
 	const data = await response.json();
@@ -69,6 +70,7 @@ summarizeButton.addEventListener("click", async () => {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify(jsonData),
+		credentials: "include",
 	});
 
 	const data = await response.json();
@@ -98,6 +100,7 @@ downloadPdf.addEventListener("click", async () => {
 			"Content-Type": "application/json",
 		},
 		body: JSON.stringify(jsonData),
+		credentials: "include",
 	})
 		.then((res) => res.blob())
 		.then((blob) => {
