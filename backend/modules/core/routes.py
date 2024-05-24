@@ -47,7 +47,14 @@ def summarize():
         }), 400
 
     text = data['text']
-    summary_ratio = float(data['summaryLevel']) / 100
+
+    # assume summaryLevel 30 if not provided
+    if 'summaryLevel' not in data:
+        summaryLevel = 30
+        summary_ratio = float(summaryLevel) / 100
+    else:
+        summary_ratio = float(data['summaryLevel']) / 100
+
     sentences = nltk.sent_tokenize(text)
     num_sentences = len(sentences)
 
