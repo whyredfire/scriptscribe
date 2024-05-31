@@ -31,7 +31,7 @@ loginButton.addEventListener("click", async (event) => {
 
 	const data = await response.json();
 
-	if (data["isSuccessful"]) {
+	if (response.code == 200) {
 		localStorage.setItem("isLoggedIn", "true");
 		localStorage.setItem("username", username);
 		window.location.href = "main.html";
@@ -61,12 +61,12 @@ signupButton.addEventListener("click", async (event) => {
 
 	const data = await response.json();
 
-	if (!data["isSuccessful"]) {
-		errorMessage.innerText = `${data["message"]}`;
-		errorMessage.style.color = "red";
-	} else {
+	if (response.code == 201) {
 		errorMessage.innerText = "user signed up!";
 		usernameInput.value = "";
 		passwordInput.value = "";
+	} else {
+		errorMessage.innerText = `${data["message"]}`;
+		errorMessage.style.color = "red";
 	}
 });

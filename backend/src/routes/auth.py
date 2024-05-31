@@ -24,22 +24,19 @@ def auth():
 
     if not check_user(username):
         return jsonify({
-            'message': 'user does not exist',
-            'isSuccessful': False
+            'message': 'user does not exist'
         }), 401
 
     if user_auth(username, password):
         token = gen_token(username)
         response = make_response(jsonify({
-            'message': 'logged in',
-            'isSuccessful': True
+            'message': 'logged in'
         }))
         response.set_cookie('token', token)
         return response, 200
     else:
         return jsonify({
-            'message': 'incorrect password',
-            'isSuccessful': False
+            'message': 'incorrect password'
         }), 401
 
 
@@ -63,14 +60,12 @@ def signup():
 
     if check_user(username):
         return jsonify({
-            'message': 'username already taken',
-            'isSuccessful': False
+            'message': 'username already taken'
         }), 409
 
     hashed_pass = salty_pass(username, password)
 
     if (add_user(username, hashed_pass)):
         return jsonify({
-            'message': 'signed up',
-            'isSuccessful': True
+            'message': 'signed up'
         }), 201

@@ -17,8 +17,7 @@ core_bp = Blueprint('core', __name__)
 def ocr():
     if 'image' not in request.files:
         return jsonify({
-            'message': 'No file uploaded',
-            'isSuccessful': False
+            'message': 'No file uploaded'
         }), 400
 
     file = request.files['image']
@@ -29,8 +28,7 @@ def ocr():
     recognized_text = recognized_text.replace('\n', ' ')
 
     return jsonify({
-        'text': recognized_text,
-        'isSuccessful': True
+        'text': recognized_text
     }), 200
 
 
@@ -41,8 +39,7 @@ def summarize():
 
     if 'text' not in data:
         return jsonify({
-            'message': 'Text field is required',
-            'isSuccessful': False
+            'message': 'Text field is required'
         }), 400
 
     text = data['text']
@@ -87,8 +84,7 @@ def summarize():
     summary = ' '.join(summary_sentences)
 
     return jsonify({
-        'summary': summary,
-        'isSuccessful': True
+        'summary': summary
     }), 200
 
 
@@ -99,8 +95,7 @@ def exportPdf():
 
     if 'text' not in data or 'summary' not in data:
         return jsonify({
-            'message': 'Text and summary fields are required',
-            'isSuccessful': False
+            'message': 'Text and summary fields are required'
         }), 400
 
     for file in os.listdir():
@@ -148,8 +143,7 @@ def exportPdf():
 
     if not os.path.exists(pdf_path):
         return jsonify({
-            'message': 'PDF file not found',
-            'isSuccessful': False
+            'message': 'PDF file not found'
         }), 500
 
     return send_file(pdf_path, as_attachment=True), 200

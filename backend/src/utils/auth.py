@@ -36,8 +36,7 @@ def token_required(f):
             return f(*args, **kwargs)
         else:
             return jsonify({
-                'message': 'Token is invalid or missing',
-                'isSuccessful': False
+                'message': 'Token is invalid or missing'
             }), 403
     return decorated_function
 
@@ -45,13 +44,11 @@ def token_required(f):
 def validate_creds(username, password):
     if not username:
         return jsonify({
-            'message': 'username cannot be empty',
-            'isSuccessful': False
+            'message': 'username cannot be empty'
         }), 400
     elif not password:
         return jsonify({
-            'message': 'password cannot be empty',
-            'isSuccessful': False
+            'message': 'password cannot be empty'
         }), 400
 
 
