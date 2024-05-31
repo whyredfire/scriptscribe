@@ -49,8 +49,7 @@ def summarize():
 
     # assume summaryLevel 30 if not provided
     if 'summaryLevel' not in data:
-        summaryLevel = 30
-        summary_ratio = float(summaryLevel) / 100
+        summary_ratio = 0.3
     else:
         summary_ratio = float(data['summaryLevel']) / 100
 
