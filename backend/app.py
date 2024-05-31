@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 
-from modules.auth.routes import auth_bp
-from modules.core.routes import core_bp
+from src.routes.auth import auth_bp
+from src.routes.core import core_bp
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)

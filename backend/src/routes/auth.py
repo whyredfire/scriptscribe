@@ -1,9 +1,8 @@
 from config import collection
 from flask import Blueprint, jsonify, make_response, request
-from .auth import check_user, gen_token, salty_pass, validate_creds
+from src.utils.auth import check_user, gen_token, salty_pass, validate_creds
 
-auth_bp = Blueprint('auth', __name__, static_folder='static',
-                    template_folder='templates')
+auth_bp = Blueprint('auth', __name__)
 
 
 @auth_bp.route('/api/login', methods=['POST'])

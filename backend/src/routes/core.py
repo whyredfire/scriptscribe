@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request, send_file
 from fpdf import FPDF
-from modules.auth.auth import token_required
+from src.utils.auth import token_required
 from PIL import Image
 import datetime
 import heapq
@@ -9,8 +9,7 @@ import nltk
 import pytesseract
 import textwrap
 
-core_bp = Blueprint('core', __name__, static_folder='static',
-                    template_folder='templates')
+core_bp = Blueprint('core', __name__)
 
 
 @core_bp.route('/api/ocr', methods=['POST'])
