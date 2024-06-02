@@ -11,6 +11,23 @@ const URL = `${window.origin}/api`;
 
 localStorage.setItem("isLoggedIn", "false");
 
+// check for token
+async function checkForToken() {
+	const response = await fetch(`${URL}/token`, {
+		method: "GET",
+		credentials: "include",
+	});
+
+	const data = await response.json();
+
+	if (response.code == 200) {
+		localStorage.setItem("isLoggedIn", "true");
+		localStorage.setItem("username", data["username"]);
+		window.location.href = "main.html";
+	}
+}
+checkForToken();
+
 loginButton.addEventListener("click", async (event) => {
 	event.preventDefault();
 

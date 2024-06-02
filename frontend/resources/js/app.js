@@ -28,6 +28,8 @@ logoutButton.addEventListener("click", () => {
 	localStorage.setItem("username", "");
 	showUsername.innerText = "";
 	window.location.href = "index.html";
+	// set cookie to expire
+	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 });
 
 const autoResize = () => {

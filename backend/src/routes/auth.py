@@ -1,8 +1,27 @@
 from config import collection
+from datetime import datetime, timedelta, timezone
 from flask import Blueprint, jsonify, make_response, request
-from src.utils.auth import check_user, gen_token, salty_pass, validate_creds
+from src.utils.auth import check_user, gen_token, salty_pass, validate_creds, validate_token
 
 auth_bp = Blueprint('auth', __name__)
+
+
+@auth_bp.route('/api/token', methods=['GET'])
+def check_token():
+    token = request.cookies.get('token')
+    decoded = validate_token(token)
+    if not decoded['valid']:
+        return jsonify({
+            "message": "Not logged in!"
+        }), 500
+    print(decoded)
+    username = decoded['payload']['username']
+    print(username)
+
+    return jsonify({
+        "message": "Logged in!",
+        "username": username
+    }), 200
 
 
 @auth_bp.route('/api/login', methods=['POST'])
@@ -32,7 +51,8 @@ def auth():
         response = make_response(jsonify({
             'message': 'logged in'
         }))
-        response.set_cookie('token', token)
+        expires = datetime.now(timezone.utc) + timedelta(days=7)
+        response.set_cookie('token', token, expires=expires)
         return response, 200
     else:
         return jsonify({
