@@ -13,11 +13,13 @@ services:
             - TZ=UTC
 
     frontend:
-        build:
-            context: ./frontend
-            dockerfile: ./Dockerfile
+        image: caddy:latest
+        volumes:
+            - ./frontend/Caddyfile:/etc/caddy/Caddyfile
+            - ./frontend:/var/www/html
         ports:
             - "80:80"
+        restart: on-failure
         depends_on:
             - backend
 
