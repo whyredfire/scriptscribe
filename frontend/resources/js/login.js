@@ -20,7 +20,7 @@ async function checkForToken() {
 
 	const data = await response.json();
 
-	if (response.code == 200) {
+	if (response.status == 200) {
 		localStorage.setItem("isLoggedIn", "true");
 		localStorage.setItem("username", data["username"]);
 		window.location.href = "main.html";
@@ -48,7 +48,7 @@ loginButton.addEventListener("click", async (event) => {
 
 	const data = await response.json();
 
-	if (response.code == 200) {
+	if (response.status == 200) {
 		localStorage.setItem("isLoggedIn", "true");
 		localStorage.setItem("username", username);
 		window.location.href = "main.html";
@@ -78,7 +78,7 @@ signupButton.addEventListener("click", async (event) => {
 
 	const data = await response.json();
 
-	if (response.code == 201) {
+	if (response.status == 201) {
 		errorMessage.innerText = "user signed up!";
 		usernameInput.value = "";
 		passwordInput.value = "";
