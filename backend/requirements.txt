@@ -19,4 +19,4 @@ pymongo==4.7.2
 pytesseract==0.3.10
 regex==2024.4.28
 tqdm==4.66.4
-Werkzeug==3.0.3
+Werkzeug==3.0.6
