@@ -10,7 +10,7 @@ itsdangerous==2.2.0
 Jinja2==3.1.4
 joblib==1.4.2
 MarkupSafe==2.1.5
-nltk==3.8.1
+nltk==3.9
 packaging==24.0
 pillow==10.3.0
 pycparser==2.22
