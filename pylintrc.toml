@@ -17,6 +17,7 @@ disable = [
     'missing-function-docstring',
     'missing-module-docstring',
     'too-few-public-methods',
+    'too-many-branches',
     'too-many-arguments',
     'too-many-boolean-expressions',
     'too-many-instance-attributes',
