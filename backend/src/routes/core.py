@@ -74,9 +74,7 @@ def summarize():
                     sentence_scores[sentence] += word_frequencies[word]
 
     num_sentences = min(summary_length, len(sentences))
-    summary_sentences = heapq.nlargest(
-        num_sentences, sentence_scores, key=sentence_scores.get
-    )
+    summary_sentences = heapq.nlargest(num_sentences, sentence_scores, key=sentence_scores.get)
     summary = " ".join(summary_sentences)
 
     return jsonify({"summary": summary}), 200

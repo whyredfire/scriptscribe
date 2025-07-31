@@ -8,7 +8,10 @@ __pycache__
 venv
 
 # mongodb data
-mongodb/data
+mongodb_data
+
+# nltk
+nltk_data
 
 # pdfs
 *pdf

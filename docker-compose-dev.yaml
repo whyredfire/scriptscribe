@@ -1,0 +1,28 @@
+services:
+  backend:
+    container_name: ss-backend
+    build:
+      context: backend
+    environment:
+      DB_CONNECTION: "mongodb://mongodb:27017"
+    volumes:
+      - ./nltk_data:/root/nltk_data
+
+  frontend:
+    container_name: ss-frontend
+    build:
+      context: frontend
+    ports:
+      - "3000:80"
+    restart: "unless-stopped"
+    depends_on:
+      - backend
+
+  mongodb:
+    container_name: ss-mongodb
+    image: mongo:latest
+    volumes:
+      - ./mongodb_data:/data/db
+    restart: "unless-stopped"
+    depends_on:
+      - backend

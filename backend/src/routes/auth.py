@@ -31,9 +31,7 @@ def auth():
     def user_auth(username, password):
         users = list(collection.find())
         for user in users:
-            if user.get("username") == username and user.get("password") == salty_pass(
-                username, password
-            ):
+            if user.get("username") == username and user.get("password") == salty_pass(username, password):
                 return True
         return False
 

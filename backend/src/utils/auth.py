@@ -44,8 +44,8 @@ def token_required(f):
 def validate_creds(username, password):
     if not username:
         return jsonify({"message": "username cannot be empty"}), 400
-
-    return jsonify({"message": "password cannot be empty"}), 400
+    if not password:
+        return jsonify({"message": "password cannot be empty"}), 400
 
 
 def check_user(username):
