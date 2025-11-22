@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss-frontend
+  namespace: scriptscribe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss-frontend
+  template:
+    metadata:
+      labels:
+        app: ss-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/whyredfire/ss-frontend:3e5673bc5fb8ec7c950c8f43a620dbcb8ba43068
+          ports:
+            - containerPort: 80

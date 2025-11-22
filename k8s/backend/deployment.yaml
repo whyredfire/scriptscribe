@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ss-backend
+  namespace: scriptscribe
+  labels:
+    app: ss-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ss-backend
+  template:
+    metadata:
+      labels:
+        app: ss-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/whyredfire/ss-backend:3e5673bc5fb8ec7c950c8f43a620dbcb8ba43068
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_CONNECTION
+              valueFrom:
+                configMapKeyRef:
+                  name: ss-backend-config
+                  key: DB_CONNECTION
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ss-auth-secret
+                  key: JWT_SECRET
+            - name: PASS_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: ss-auth-secret
+                  key: PASS_SALT
