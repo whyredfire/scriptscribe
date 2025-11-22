@@ -5,6 +5,12 @@ services:
       context: backend
     environment:
       DB_CONNECTION: "mongodb://mongodb:27017"
+    develop:
+      watch:
+        - action: rebuild
+          path: backend
+    ports:
+      - 8000:8000
     volumes:
       - ./nltk_data:/root/nltk_data
 
@@ -12,8 +18,12 @@ services:
     container_name: ss-frontend
     build:
       context: frontend
+    develop:
+      watch:
+        - action: rebuild
+          path: frontend
     ports:
-      - "3000:80"
+      - 3000:80
     restart: "unless-stopped"
     depends_on:
       - backend

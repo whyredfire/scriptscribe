@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+
 from flask import Blueprint, jsonify, make_response, request
 
 from config import collection
@@ -13,12 +14,12 @@ from src.utils.auth import (
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/api/token", methods=["GET"])
+@auth_bp.route("/token", methods=["GET"])
 def check_token():
     token = request.cookies.get("token")
     decoded = validate_token(token)
     if not decoded["valid"]:
-        return jsonify({"message": "Not logged in!"}), 500
+        return jsonify({"message": "Not logged in!"}), 401
     print(decoded)
     username = decoded["payload"]["username"]
     print(username)
@@ -26,12 +27,14 @@ def check_token():
     return jsonify({"message": "Logged in!", "username": username}), 200
 
 
-@auth_bp.route("/api/login", methods=["POST"])
+@auth_bp.route("/login", methods=["POST"])
 def auth():
     def user_auth(username, password):
         users = list(collection.find())
         for user in users:
-            if user.get("username") == username and user.get("password") == salty_pass(username, password):
+            if user.get("username") == username and user.get("password") == salty_pass(
+                username, password
+            ):
                 return True
         return False
 
@@ -44,7 +47,7 @@ def auth():
         return response
 
     if not check_user(username):
-        return jsonify({"message": "user does not exist"}), 401
+        return jsonify({"message": "user does not exist"}), 404
 
     if user_auth(username, password):
         token = gen_token(username)
@@ -56,7 +59,7 @@ def auth():
     return jsonify({"message": "incorrect password"}), 401
 
 
-@auth_bp.route("/api/signup", methods=["POST"])
+@auth_bp.route("/signup", methods=["POST"])
 def signup():
     def add_user(username, hashed_pass):
         new_user = {"username": username, "password": hashed_pass}

@@ -48,5 +48,6 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Reset the entrypoint, don't invoke `uv`
 ENTRYPOINT []
 
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+EXPOSE 8000
 
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "app:app"]

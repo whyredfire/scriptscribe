@@ -2,18 +2,19 @@ import datetime
 import heapq
 import os
 import textwrap
+
+import nltk
+import pytesseract
 from flask import Blueprint, jsonify, request, send_file
 from fpdf import FPDF
 from PIL import Image
-import nltk
-import pytesseract
 
 from src.utils.auth import token_required
 
 core_bp = Blueprint("core", __name__)
 
 
-@core_bp.route("/api/ocr", methods=["POST"])
+@core_bp.route("/ocr", methods=["POST"])
 @token_required
 def ocr():
     if "image" not in request.files:
@@ -29,7 +30,7 @@ def ocr():
     return jsonify({"text": recognized_text}), 200
 
 
-@core_bp.route("/api/summarize", methods=["POST"])
+@core_bp.route("/summarize", methods=["POST"])
 @token_required
 def summarize():
     data = request.get_json()
@@ -74,13 +75,17 @@ def summarize():
                     sentence_scores[sentence] += word_frequencies[word]
 
     num_sentences = min(summary_length, len(sentences))
-    summary_sentences = heapq.nlargest(num_sentences, sentence_scores, key=sentence_scores.get)
+    summary_sentences = heapq.nlargest(
+        num_sentences,
+        sentence_scores,
+        key=sentence_scores.get,  # type: ignore
+    )
     summary = " ".join(summary_sentences)
 
     return jsonify({"summary": summary}), 200
 
 
-@core_bp.route("/api/exportpdf", methods=["POST"])
+@core_bp.route("/exportpdf", methods=["POST"])
 @token_required
 def exportPdf():
     data = request.get_json()
@@ -108,7 +113,7 @@ def exportPdf():
     pdf.add_page()
 
     pdf.set_font("Courier", "B", 16)
-    pdf.cell(200, 10, txt="ScriptScribe", ln=1, align="C")
+    pdf.cell(200, 10, txt="ScriptScribe", ln=1, align="C")  # type: ignore
 
     pdf.set_line_width(0.5)
     pdf.line(10, pdf.get_y(), 200 - 10, pdf.get_y())

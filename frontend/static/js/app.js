@@ -14,99 +14,99 @@ const isLoggedIn = localStorage.getItem("isLoggedIn");
 const logoutButton = document.getElementById("logout");
 const showUsername = document.getElementById("showUsername");
 
-const URL = `${window.origin}/api`;
+const URL = "/api";
 
-if (isLoggedIn == "false") {
-	window.location.href = "index.html";
+if (isLoggedIn === "false") {
+  window.location.href = "/";
 } else {
-	const username = localStorage.getItem("username");
-	showUsername.innerText = username;
+  const username = localStorage.getItem("username");
+  showUsername.innerText = username;
 }
 
 logoutButton.addEventListener("click", () => {
-	localStorage.setItem("isLoggedIn", "false");
-	localStorage.setItem("username", "");
-	showUsername.innerText = "";
-	window.location.href = "index.html";
-	// set cookie to expire
-	document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  localStorage.setItem("isLoggedIn", "false");
+  localStorage.setItem("username", "");
+  showUsername.innerText = "";
+  window.location.href = "/";
+  // set cookie to expire
+  document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 });
 
 const autoResize = () => {
-	textInput.style.height = "auto";
-	textInput.style.height = `${textInput.scrollHeight}px`;
+  textInput.style.height = "auto";
+  textInput.style.height = `${textInput.scrollHeight}px`;
 };
 
 inputForm.addEventListener("submit", async (event) => {
-	event.preventDefault();
+  event.preventDefault();
 
-	const formData = new FormData();
-	formData.append("image", fileInput.files[0]);
+  const formData = new FormData();
+  formData.append("image", fileInput.files[0]);
 
-	const response = await fetch(`${URL}/ocr`, {
-		method: "POST",
-		body: formData,
-		credentials: "include",
-	});
+  const response = await fetch(`${URL}/ocr`, {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+  });
 
-	const data = await response.json();
+  const data = await response.json();
 
-	textInput.value = data.text;
-	autoResize();
+  textInput.value = data.text;
+  autoResize();
 });
 
 textInput.addEventListener("input", autoResize);
 
 summarizeButton.addEventListener("click", async () => {
-	const extractedText = textInput.value;
-	const summaryLength = summarySize.value;
+  const extractedText = textInput.value;
+  const summaryLength = summarySize.value;
 
-	const jsonData = {
-		text: `${extractedText}`,
-		summaryLevel: `${summaryLength}`,
-	};
+  const jsonData = {
+    text: `${extractedText}`,
+    summaryLevel: `${summaryLength}`,
+  };
 
-	const response = await fetch(`${URL}/summarize`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(jsonData),
-		credentials: "include",
-	});
+  const response = await fetch(`${URL}/summarize`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonData),
+    credentials: "include",
+  });
 
-	const data = await response.json();
-	summarizedText.innerText = data.summary;
-	extractionPage.classList.remove("hidden");
-	downloadPdf.classList.remove("hidden");
+  const data = await response.json();
+  summarizedText.innerText = data.summary;
+  extractionPage.classList.remove("hidden");
+  downloadPdf.classList.remove("hidden");
 });
 
 copyClipboard.addEventListener("click", async () => {
-	const summary = summarizedText.innerHTML;
-	await navigator.clipboard.writeText(summary);
-	clipboardToast.innerText = "Copied to clipboard!";
+  const summary = summarizedText.innerHTML;
+  await navigator.clipboard.writeText(summary);
+  clipboardToast.innerText = "Copied to clipboard!";
 });
 
 downloadPdf.addEventListener("click", async () => {
-	const extractedText = textInput.value;
-	const summary = summarizedText.innerHTML;
+  const extractedText = textInput.value;
+  const summary = summarizedText.innerHTML;
 
-	const jsonData = {
-		text: `${extractedText}`,
-		summary: `${summary}`,
-	};
+  const jsonData = {
+    text: `${extractedText}`,
+    summary: `${summary}`,
+  };
 
-	fetch(`${URL}/exportpdf`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(jsonData),
-		credentials: "include",
-	})
-		.then((res) => res.blob())
-		.then((blob) => {
-			var file = window.URL.createObjectURL(blob);
-			window.location.assign(file);
-		});
+  fetch(`${URL}/exportpdf`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(jsonData),
+    credentials: "include",
+  })
+    .then((res) => res.blob())
+    .then((blob) => {
+      var file = window.URL.createObjectURL(blob);
+      window.location.assign(file);
+    });
 });

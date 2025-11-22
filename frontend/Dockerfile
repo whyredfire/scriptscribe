@@ -1,6 +1,5 @@
-FROM caddy:alpine
+FROM nginx:alpine-slim
 
-COPY Caddyfile /etc/caddy/Caddyfile
-COPY static /var/www/html
+COPY static /usr/share/nginx/html
 
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+EXPOSE 80

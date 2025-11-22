@@ -1,12 +1,15 @@
 import hashlib
+import os
 import time
 from functools import wraps
+
 import jwt
-from flask import request, jsonify
+from flask import jsonify, request
 
 from config import collection
 
-SECRET = "scriptscribeftw"
+SECRET = os.getenv("JWT_SECRET", "scriptscribeftw")
+SALT = os.getenv("PASS_SALT", "scriptscribeftw")
 
 
 def gen_token(username):
@@ -57,8 +60,7 @@ def check_user(username):
 
 
 def salty_pass(username, password):
-    salt = "scriptscribeftw"
-    salted_pass = username + salt + password
+    salted_pass = username + SALT + password
 
     hashed_pass = hashlib.md5(salted_pass.encode())
     return hashed_pass.hexdigest()
