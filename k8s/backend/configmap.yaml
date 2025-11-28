@@ -1,7 +1,6 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ss-backend-config
-  namespace: scriptscribe
+  name: backend-config
 data:
-  DB_CONNECTION: "mongodb://ss-mongodb.scriptscribe.svc.cluster.local:27017"
+  DB_CONNECTION: "mongodb://mongodb.scriptscribe.svc.cluster.local:27017"

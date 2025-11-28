@@ -1,18 +1,17 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: ss-mongodb
-  namespace: scriptscribe
+  name: mongodb
 spec:
-  serviceName: ss-mongodb
+  serviceName: mongodb
   replicas: 1
   selector:
     matchLabels:
-      app: ss-mongodb
+      app: mongodb
   template:
     metadata:
       labels:
-        app: ss-mongodb
+        app: mongodb
     spec:
       containers:
         - name: mongodb

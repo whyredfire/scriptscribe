@@ -1,17 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ss-frontend
-  namespace: scriptscribe
+  name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ss-frontend
+      app: frontend
   template:
     metadata:
       labels:
-        app: ss-frontend
+        app: frontend
     spec:
       containers:
         - name: frontend

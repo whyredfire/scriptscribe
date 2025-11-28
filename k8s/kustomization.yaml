@@ -1,13 +1,5 @@
 resources:
-  # backend
-  - backend/auth-secret.yaml
-  - backend/configmap.yaml
-  - backend/deployment.yaml
-  - backend/service.yaml
-  # database
-  - database/stateful-set.yaml
-  - database/service.yaml
-  # frontend
-  - frontend/deployment.yaml
-  - frontend/service.yaml
+  - database
+  - frontend
+  - backend
   - ingress.yaml

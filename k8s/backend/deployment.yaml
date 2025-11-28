@@ -1,19 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ss-backend
-  namespace: scriptscribe
+  name: backend
   labels:
-    app: ss-backend
+    app: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ss-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: ss-backend
+        app: backend
     spec:
       containers:
         - name: backend
@@ -24,15 +23,15 @@ spec:
             - name: DB_CONNECTION
               valueFrom:
                 configMapKeyRef:
-                  name: ss-backend-config
+                  name: backend-config
                   key: DB_CONNECTION
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: ss-auth-secret
+                  name: auth-secret
                   key: JWT_SECRET
             - name: PASS_SALT
               valueFrom:
                 secretKeyRef:
-                  name: ss-auth-secret
+                  name: auth-secret
                   key: PASS_SALT
