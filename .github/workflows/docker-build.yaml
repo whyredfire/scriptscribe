@@ -1,9 +1,13 @@
-name: Build and Push to GHCR
+name: Build and Push Docker Image to GHCR
 
 on:
   push:
     branches:
       - main
+    paths:
+      - .github/workflows/docker-build.yaml
+      - backend/**/*
+      - frontend/**/*
   workflow_dispatch:
 
 jobs:
