@@ -1,5 +1,6 @@
-FROM nginx:alpine-slim
+FROM nginxinc/nginx-unprivileged:stable-alpine-slim
 
-COPY static /usr/share/nginx/html
+COPY --chown=nginx:nginx static /usr/share/nginx/html
+RUN mkdir -p /etc/nginx/tmp && chown -R nginx:nginx /etc/nginx/tmp
 
-EXPOSE 80
+EXPOSE 8080

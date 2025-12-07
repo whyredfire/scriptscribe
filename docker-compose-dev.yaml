@@ -13,7 +13,6 @@ services:
       - 8000:8000
     volumes:
       - ./nltk_data:/root/nltk_data
-    restart: unless-stopped
 
   frontend:
     container_name: ss-frontend
@@ -24,16 +23,25 @@ services:
         - action: rebuild
           path: frontend
     ports:
-      - 3000:80
-    restart: unless-stopped
+      - 3000:8080
     depends_on:
       - backend
+
+  caddy:
+    container_name: ss-caddy
+    image: caddy:alpine
+    ports:
+      - 80:80
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - backend
+      - frontend
 
   mongodb:
     container_name: ss-mongodb
     image: mongo:latest
     volumes:
       - ./mongodb_data:/data/db
-    restart: unless-stopped
     depends_on:
       - backend

@@ -14,7 +14,7 @@ services:
     container_name: ss-frontend
     image: ghcr.io/whyredfire/ss-frontend:latest
     ports:
-      - 3000:80
+      - 3000:8080
     restart: unless-stopped
     depends_on:
       - backend
