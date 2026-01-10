@@ -17,3 +17,7 @@ spec:
           image: ghcr.io/whyredfire/ss-frontend:a3ed3c716ad8c04aac59759c19440ab86c670183
           ports:
             - containerPort: 80
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi

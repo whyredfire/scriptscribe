@@ -35,3 +35,7 @@ spec:
                 secretKeyRef:
                   name: auth-secret
                   key: PASS_SALT
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
