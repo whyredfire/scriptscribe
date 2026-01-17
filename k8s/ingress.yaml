@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - scriptscribe.whyredfire.tech
+      - scriptscribe.whyredfire.dev
       secretName: scriptscribe-tls
   rules:
-    - host: scriptscribe.whyredfire.tech
+    - host: scriptscribe.whyredfire.dev
       http:
         paths:
           - path: /api
