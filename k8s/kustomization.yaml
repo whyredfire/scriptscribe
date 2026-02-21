@@ -5,4 +5,4 @@ resources:
   - database
   - frontend
   - backend
-  - ingress.yaml
+  - httproute.yaml
