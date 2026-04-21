@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/whyredfire/ss-backend:ab12d83c1eeecfdb9c8df1564485425a128478b5
+          image: ghcr.io/whyredfire/ss-backend:8eec567b670fce8e60f63183d8c6586c21b35d1e
           ports:
             - containerPort: 8000
           env:
