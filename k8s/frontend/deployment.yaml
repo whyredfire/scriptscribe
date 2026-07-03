@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/whyredfire/ss-frontend:8d6cbd2175210868f5875691974652ae947230c9
+          image: ghcr.io/whyredfire/ss-frontend:fa9d7a053542c8814d4f39d44ac94b782a6bd751
           ports:
             - containerPort: 80
           resources:
