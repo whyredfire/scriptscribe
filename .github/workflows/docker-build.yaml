@@ -26,10 +26,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -38,7 +38,24 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Build and Push Docker Image for ${{ matrix.name }}
+      - name: Build Local Docker Image for Scanning
+        uses: docker/build-push-action@v7
+        with:
+          context: ${{ matrix.path }}
+          load: true
+          tags: ghcr.io/whyredfire/${{ matrix.name }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: 'ghcr.io/whyredfire/${{ matrix.name }}:${{ github.sha }}'
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Build and Push Final Docker Image for ${{ matrix.name }}
         uses: docker/build-push-action@v7
         with:
           context: ${{ matrix.path }}
@@ -58,7 +75,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Update image tags
         run: |
