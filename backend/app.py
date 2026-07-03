@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 from src.routes.auth import auth_bp
 from src.routes.core import core_bp
@@ -16,6 +16,12 @@ def on_startup():
 on_startup()
 
 app = Flask(__name__)
+
+
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"message": "OK"})
+
 
 app.register_blueprint(auth_bp, url_prefix="/api")
 app.register_blueprint(core_bp, url_prefix="/api")
