@@ -13,6 +13,9 @@ services:
       - 8000:8000
     volumes:
       - ./nltk_data:/root/nltk_data
+    depends_on:
+      mongodb:
+        condition: service_healthy
 
   frontend:
     container_name: ss-frontend
@@ -31,7 +34,7 @@ services:
     container_name: ss-caddy
     image: caddy:alpine
     ports:
-      - 80:80
+      - 8080:80
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
     depends_on:
@@ -43,5 +46,9 @@ services:
     image: mongo:latest
     volumes:
       - ./mongodb_data:/data/db
-    depends_on:
-      - backend
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
