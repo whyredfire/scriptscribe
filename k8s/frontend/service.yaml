@@ -4,8 +4,6 @@ metadata:
   name: frontend
 spec:
   type: ClusterIP
-  selector:
-    app: frontend
   ports:
     - port: 8080
       targetPort: 8080

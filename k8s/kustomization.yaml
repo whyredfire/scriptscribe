@@ -1,6 +1,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
+labels:
+  - pairs:
+      app.kubernetes.io/name: scriptscribe
+      app.kubernetes.io/instance: scriptscribe
+    includeTemplates: true
+    fields:
+      - path: spec/selector/matchLabels
+        kind: Deployment
+        create: true
+      - path: spec/selector/matchLabels
+        kind: StatefulSet
+        create: true
+      - path: spec/selector
+        kind: Service
+        create: true
+  - pairs:
+      app.kubernetes.io/managed-by: kustomize
+    includeTemplates: true
 resources:
   - database
   - frontend

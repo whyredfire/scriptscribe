@@ -1,9 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-
+labels:
+  - pairs:
+      app.kubernetes.io/component: backend
+    includeTemplates: true
+    fields:
+      - path: spec/selector/matchLabels
+        kind: Deployment
+        create: true
+      - path: spec/selector/matchLabels
+        kind: StatefulSet
+        create: true
+      - path: spec/selector
+        kind: Service
+        create: true
 resources:
   - auth-sealed-secret.yaml
   - deployment.yaml
   - configmap.yaml
   - service.yaml
-
