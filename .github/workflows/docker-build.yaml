@@ -12,90 +12,68 @@ on:
 
 permissions:
   contents: read
-  packages: write
 
 jobs:
-  build-and-push:
-    runs-on: ${{ matrix.runner }}
+  build:
     strategy:
       matrix:
-        arch: [amd64, arm64]
         service: [frontend, backend]
-        include:
-          - arch: amd64
-            runner: ubuntu-latest
-          - arch: arm64
-            runner: ubuntu-24.04-arm
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v7
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
+    uses: docker/github-builder/.github/workflows/build.yml@v1
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+    with:
+      context: ${{ matrix.service }}
+      output: image
+      push: true
+      platforms: linux/amd64,linux/arm64
+      cache: true
+      cache-scope: ${{ matrix.service }}
+      sbom: true
+      set-meta-labels: true
+      set-meta-annotations: true
+      meta-images: ghcr.io/whyredfire/ss-${{ matrix.service }}
+      meta-tags: |
+        type=sha,format=long,prefix=
+        type=raw,value=latest
+    secrets:
+      registry-auths: |
+        - registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Build Docker Image for ${{ matrix.service }}
-        uses: docker/build-push-action@v7
-        with:
-          context: ${{ matrix.service }}
-          load: true
-          tags: ghcr.io/whyredfire/ss-${{ matrix.service }}:${{ github.sha }}-${{ matrix.arch }}
-          cache-from: type=gha,scope=${{ github.ref_name }}-${{ matrix.service }}-${{ matrix.arch }}
-          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.service }}-${{ matrix.arch }}
-
+  # Images with critical vulnerabilities are pushed but never deployed
+  scan:
+    needs: build
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      packages: read
+    strategy:
+      matrix:
+        service: [frontend, backend]
+    steps:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@v0.36.0
+        env:
+          TRIVY_USERNAME: ${{ github.actor }}
+          TRIVY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         with:
           version: "latest"
-          image-ref: "ghcr.io/whyredfire/ss-${{ matrix.service }}:${{ github.sha }}-${{ matrix.arch }}"
+          image-ref: "ghcr.io/whyredfire/ss-${{ matrix.service }}:${{ github.sha }}"
           exit-code: "1"
           ignore-unfixed: true
           severity: "CRITICAL"
 
-      - name: Push Docker Image to GHCR
-        run: |
-          docker push ghcr.io/whyredfire/ss-${{ matrix.service }}:${{ github.sha }}-${{ matrix.arch }}
-
-  create-multiarch:
-    needs: build-and-push
-    runs-on: ubuntu-latest
+  update-manifests:
+    needs: scan
+    runs-on: ubuntu-slim
     permissions:
       contents: write
-      packages: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
-
-      - name: Create multi-arch manifests
-        run: |
-          services=("ss-frontend" "ss-backend")
-
-          for service in "${services[@]}"; do
-            echo "Creating manifest for $service..."
-
-            docker buildx imagetools create \
-              -t ghcr.io/whyredfire/$service:latest \
-              -t ghcr.io/whyredfire/$service:${{ github.sha }} \
-              ghcr.io/whyredfire/$service:${{ github.sha }}-amd64 \
-              ghcr.io/whyredfire/$service:${{ github.sha }}-arm64
-          done
 
       - name: Update image tags
         run: |
