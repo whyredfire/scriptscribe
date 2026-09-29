@@ -17,3 +17,4 @@ labels:
 resources:
   - stateful-set.yaml
   - service.yaml
+  - networkpolicy.yaml

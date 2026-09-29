@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongodb
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: scriptscribe
+      app.kubernetes.io/instance: scriptscribe
+      app.kubernetes.io/component: database
+  # Only the backend connects, and MongoDB makes no connections of its own
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: scriptscribe
+              app.kubernetes.io/instance: scriptscribe
+              app.kubernetes.io/component: backend
+      ports:
+        - port: 27017
