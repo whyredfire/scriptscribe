@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ScriptScribe (archived)</title>
+        <meta
+            name="description"
+            content="ScriptScribe: extract text from images, summarize it, export to PDF. An archived college project."
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <main>
+            <p class="notice">
+                Archived. I built this in college while learning web
+                development, and it has served its purpose. The live app is
+                down and the project is no longer maintained.
+            </p>
+
+            <h1>ScriptScribe</h1>
+            <p class="tagline">Extract, Summarize, Export</p>
+
+            <p>
+                A web app to extract text from images via OCR and generate
+                summaries, with secure user auth.
+            </p>
+
+            <h2>Features</h2>
+            <ul>
+                <li>OCR: upload an image and get the text back (Tesseract)</li>
+                <li>Summaries: extractive, with an adjustable length (NLTK)</li>
+                <li>Export: copy to clipboard or download as PDF</li>
+                <li>
+                    Auth: signup and login, with JWT sessions kept in a cookie
+                </li>
+            </ul>
+
+            <h2>Stack</h2>
+            <p>
+                Python, Flask, MongoDB, HTML, CSS, JavaScript, Docker,
+                Kubernetes, GitHub Actions
+            </p>
+
+            <h2>Setup</h2>
+            <ul>
+                <li>
+                    <strong>Frontend:</strong> static HTML/CSS/JS served from a
+                    container.
+                </li>
+                <li>
+                    <strong>Backend:</strong> Flask under gunicorn, in a
+                    multi-stage image with a bundled Tesseract and NLTK data,
+                    dependencies managed with uv.
+                </li>
+                <li>
+                    <strong>Database:</strong> MongoDB as a StatefulSet with a
+                    persistent volume.
+                </li>
+                <li>
+                    <strong>CI/CD:</strong> a GitHub Actions workflow builds
+                    multi-arch images (amd64/arm64) with SBOMs, pushes them to
+                    GHCR, scans them with Trivy (critical CVEs block the
+                    deploy), then commits the new image tags to the k8s
+                    manifests.
+                </li>
+                <li>
+                    <strong>Kubernetes:</strong> Kustomize manifests for all
+                    three services, secrets stored as a SealedSecret, and an
+                    HTTPRoute behind a Traefik gateway.
+                </li>
+                <li>
+                    <strong>Network policies:</strong> default-deny with
+                    explicit allows. The gateway reaches the frontend and
+                    backend, the backend reaches MongoDB and DNS, and nothing
+                    else gets in or out.
+                </li>
+                <li>
+                    <strong>Local:</strong> <code>docker-compose up</code> runs
+                    the whole stack.
+                </li>
+            </ul>
+
+            <h2>Screenshots</h2>
+
+            <figure>
+                <img src="img/01-login.png" alt="Login page" loading="lazy" />
+                <figcaption>Login</figcaption>
+            </figure>
+            <figure>
+                <img src="img/02-signup.png" alt="Signup confirmation" loading="lazy" />
+                <figcaption>Sign up</figcaption>
+            </figure>
+            <figure>
+                <img src="img/03-home.png" alt="Empty home page" loading="lazy" />
+                <figcaption>Home</figcaption>
+            </figure>
+            <figure>
+                <img src="img/04-ocr.png" alt="Text extracted from an uploaded image" loading="lazy" />
+                <figcaption>Text extracted from an uploaded image</figcaption>
+            </figure>
+            <figure>
+                <img src="img/05-summary.png" alt="Summary with export options" loading="lazy" />
+                <figcaption>Summary, with copy and PDF export</figcaption>
+            </figure>
+
+            <footer>
+                <a href="https://github.com/whyredfire/scriptscribe">Source on GitHub</a>
+                · MIT licensed · Made by Team ScriptScribe
+            </footer>
+        </main>
+        <script src="script.js"></script>
+    </body>
+</html>
