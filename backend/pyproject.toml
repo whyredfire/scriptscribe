@@ -9,8 +9,8 @@ dependencies = [
     "fpdf>=1.7.2",
     "gunicorn>=26.2.0",
     "nltk>=3.10.3",
-    "pillow>=12.3.0",
+    "pillow>=13.0.0",
     "pyjwt>=2.15.1",
-    "pymongo>=4.18.2",
+    "pymongo>=4.19.0",
     "pytesseract>=0.3.13",
 ]
